@@ -1,10 +1,13 @@
 package main
 
 import (
+	"changeme/ent"
 	"context"
 	"fmt"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 // App struct
@@ -31,6 +34,22 @@ func (a *App) startup(ctx context.Context) {
 		runtime.LogDebug(a.ctx, "WindowHide called")
 	}
 
+	runtime.LogDebug(a.ctx, "Loading DB")
+	a.GetDB()
+
+	runtime.LogDebug(a.ctx, "Startup complete")
+
+}
+
+func (a *App) GetDB() *ent.Client {
+	client, err := ent.Open("sqlite3", "file:njournal.db?mode=rwc&cache=shared&_fk=1")
+	if err != nil {
+		panic(err)
+	}
+	if err := client.Schema.Create(a.ctx); err != nil {
+		panic(err)
+	}
+	return client
 }
 
 // Create project
