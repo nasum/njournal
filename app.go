@@ -12,7 +12,8 @@ import (
 
 // App struct
 type App struct {
-	ctx context.Context
+	ctx         context.Context
+	noteService *NotesService
 }
 
 // NewApp creates a new App application struct
@@ -29,13 +30,14 @@ func (a *App) startup(ctx context.Context) {
 	runtime.LogDebug(a.ctx, "Startup called")
 	runtime.LogDebug(a.ctx, "Build Type: "+env.BuildType)
 
-	if env.BuildType == "dev" {
-		runtime.WindowHide(a.ctx)
-		runtime.LogDebug(a.ctx, "WindowHide called")
-	}
+	// if env.BuildType == "dev" {
+	// 	runtime.WindowHide(a.ctx)
+	// 	runtime.LogDebug(a.ctx, "WindowHide called")
+	// }
 
 	runtime.LogDebug(a.ctx, "Loading DB")
-	a.GetDB()
+	client := a.GetDB()
+	a.noteService = &NotesService{client: client, ctx: a.ctx}
 
 	runtime.LogDebug(a.ctx, "Startup complete")
 
@@ -60,4 +62,10 @@ func (a *App) CreateProject(name string) string {
 // Get projects
 func (a *App) GetProjects() []string {
 	return []string{"Project 1", "Project 2"}
+}
+
+// Create note
+func (a *App) CreateNote(title string, content string) Note {
+	note := a.noteService.Create(Note{Title: title, Content: content})
+	return note
 }

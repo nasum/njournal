@@ -1,11 +1,15 @@
+import { Outlet } from 'react-router-dom';
+import { AppHeader } from './components/common/AppHeader';
+
 function App() {
-    return (
-        <div id="App">
-            <button>new project</button>
-            <h1>Hello, world!</h1>
-            aaa
-        </div>
-    )
+  return (
+    <div id="App">
+      <AppHeader />
+      <main>
+        <Outlet />
+      </main>
+    </div>
+  )
 }
 
 export default App
