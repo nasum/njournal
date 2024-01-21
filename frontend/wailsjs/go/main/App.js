@@ -17,3 +17,7 @@ export function GetDB() {
 export function GetProjects() {
   return window['go']['main']['App']['GetProjects']();
 }
+
+export function ListNotes() {
+  return window['go']['main']['App']['ListNotes']();
+}

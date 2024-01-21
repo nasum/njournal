@@ -69,3 +69,8 @@ func (a *App) CreateNote(title string, content string) Note {
 	note := a.noteService.Create(Note{Title: title, Content: content})
 	return note
 }
+
+// List notes
+func (a *App) ListNotes() []Note {
+	return a.noteService.List()
+}

@@ -7,9 +7,25 @@ import (
 )
 
 type Note struct {
-	ID      int
-	Title   string
-	Content string
+	ID        int
+	Title     string
+	Content   string
+	UpdatedAt time.Time
+	CreatedAt time.Time
+}
+
+func createNoteList(rowNotes []*ent.Note) []Note {
+	var notes []Note
+	for _, rowNote := range rowNotes {
+		notes = append(notes, Note{
+			ID:        rowNote.ID,
+			Title:     rowNote.Title,
+			Content:   rowNote.Content,
+			UpdatedAt: rowNote.UpdatedAt,
+			CreatedAt: rowNote.CreatedAt,
+		})
+	}
+	return notes
 }
 
 type NotesService struct {
@@ -46,7 +62,11 @@ func (n *NotesService) Search() string {
 	return "Hello World!"
 }
 
-func (n *NotesService) List() string {
-	n.client.Note.Query().All(n.ctx)
-	return "Hello World!"
+func (n *NotesService) List() []Note {
+	notes, err := n.client.Note.Query().All(n.ctx)
+	if err != nil {
+		panic(err)
+	}
+
+	return createNoteList(notes)
 }

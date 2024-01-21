@@ -19,8 +19,11 @@ export const Form = () => {
     event.preventDefault()
     console.log(title, content)
     await CallCreateNote({
+      id: "",
       title: title,
       content: content,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     })
     navigate("/notes")
   }

@@ -8,6 +8,7 @@ import {
 import App from './App'
 import { Notes } from './components/pages/notes/Note';
 import { Form } from './components/pages/notes/Form';
+import { List } from './components/pages/notes/List';
 import '@acab/reset.css';
 
 const container = document.getElementById('root')
@@ -26,7 +27,7 @@ const router = createBrowserRouter([{
       children: [
         {
           path: "",
-          element: <h1>Notes</h1>,
+          element: <List />,
         },
         {
           path: "new",
