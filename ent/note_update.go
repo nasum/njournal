@@ -28,20 +28,6 @@ func (nu *NoteUpdate) Where(ps ...predicate.Note) *NoteUpdate {
 	return nu
 }
 
-// SetTitle sets the "title" field.
-func (nu *NoteUpdate) SetTitle(s string) *NoteUpdate {
-	nu.mutation.SetTitle(s)
-	return nu
-}
-
-// SetNillableTitle sets the "title" field if the given value is not nil.
-func (nu *NoteUpdate) SetNillableTitle(s *string) *NoteUpdate {
-	if s != nil {
-		nu.SetTitle(*s)
-	}
-	return nu
-}
-
 // SetContent sets the "content" field.
 func (nu *NoteUpdate) SetContent(s string) *NoteUpdate {
 	nu.mutation.SetContent(s)
@@ -125,9 +111,6 @@ func (nu *NoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := nu.mutation.Title(); ok {
-		_spec.SetField(note.FieldTitle, field.TypeString, value)
-	}
 	if value, ok := nu.mutation.Content(); ok {
 		_spec.SetField(note.FieldContent, field.TypeString, value)
 	}
@@ -155,20 +138,6 @@ type NoteUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *NoteMutation
-}
-
-// SetTitle sets the "title" field.
-func (nuo *NoteUpdateOne) SetTitle(s string) *NoteUpdateOne {
-	nuo.mutation.SetTitle(s)
-	return nuo
-}
-
-// SetNillableTitle sets the "title" field if the given value is not nil.
-func (nuo *NoteUpdateOne) SetNillableTitle(s *string) *NoteUpdateOne {
-	if s != nil {
-		nuo.SetTitle(*s)
-	}
-	return nuo
 }
 
 // SetContent sets the "content" field.
@@ -283,9 +252,6 @@ func (nuo *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) 
 				ps[i](selector)
 			}
 		}
-	}
-	if value, ok := nuo.mutation.Title(); ok {
-		_spec.SetField(note.FieldTitle, field.TypeString, value)
 	}
 	if value, ok := nuo.mutation.Content(); ok {
 		_spec.SetField(note.FieldContent, field.TypeString, value)

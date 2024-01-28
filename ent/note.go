@@ -17,8 +17,6 @@ type Note struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// Title holds the value of the "title" field.
-	Title string `json:"title,omitempty"`
 	// Content holds the value of the "content" field.
 	Content string `json:"content,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
@@ -35,7 +33,7 @@ func (*Note) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case note.FieldID:
 			values[i] = new(sql.NullInt64)
-		case note.FieldTitle, note.FieldContent:
+		case note.FieldContent:
 			values[i] = new(sql.NullString)
 		case note.FieldCreatedAt, note.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -60,12 +58,6 @@ func (n *Note) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			n.ID = int(value.Int64)
-		case note.FieldTitle:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field title", values[i])
-			} else if value.Valid {
-				n.Title = value.String
-			}
 		case note.FieldContent:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field content", values[i])
@@ -120,9 +112,6 @@ func (n *Note) String() string {
 	var builder strings.Builder
 	builder.WriteString("Note(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", n.ID))
-	builder.WriteString("title=")
-	builder.WriteString(n.Title)
-	builder.WriteString(", ")
 	builder.WriteString("content=")
 	builder.WriteString(n.Content)
 	builder.WriteString(", ")

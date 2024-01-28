@@ -3,7 +3,7 @@
 import {main} from '../models';
 import {ent} from '../models';
 
-export function CreateNote(arg1:string,arg2:string):Promise<main.Note>;
+export function CreateNote(arg1:string):Promise<main.Note>;
 
 export function CreateProject(arg1:string):Promise<string>;
 

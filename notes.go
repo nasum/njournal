@@ -8,7 +8,6 @@ import (
 
 type Note struct {
 	ID        int
-	Title     string
 	Content   string
 	UpdatedAt time.Time
 	CreatedAt time.Time
@@ -19,7 +18,6 @@ func createNoteList(rowNotes []*ent.Note) []Note {
 	for _, rowNote := range rowNotes {
 		notes = append(notes, Note{
 			ID:        rowNote.ID,
-			Title:     rowNote.Title,
 			Content:   rowNote.Content,
 			UpdatedAt: rowNote.UpdatedAt,
 			CreatedAt: rowNote.CreatedAt,
@@ -35,13 +33,12 @@ type NotesService struct {
 
 func (n *NotesService) Create(note Note) Note {
 	today := time.Now()
-	savedNote, err := n.client.Note.Create().SetContent(note.Content).SetTitle(note.Title).SetUpdatedAt(today).SetCreatedAt(today).Save(n.ctx)
+	savedNote, err := n.client.Note.Create().SetContent(note.Content).SetUpdatedAt(today).SetCreatedAt(today).Save(n.ctx)
 	if err != nil {
 		panic(err)
 	}
 	return Note{
 		ID:      savedNote.ID,
-		Title:   savedNote.Title,
 		Content: savedNote.Content,
 	}
 }

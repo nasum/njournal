@@ -3,7 +3,6 @@ import { CallListNotes } from '../../../lib/notes'
 
 type Note = {
   id: string
-  title: string
   content: string
   updatedAt: string
   createdAt: string
@@ -19,7 +18,7 @@ export const List = () => {
   return (
     <ul>
       {notes.map(note => (
-        <li key={note.id}>{note.title}</li>
+        <li key={note.id}>{note.content}</li>
       ))}
     </ul>
   )

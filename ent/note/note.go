@@ -11,8 +11,6 @@ const (
 	Label = "note"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldTitle holds the string denoting the title field in the database.
-	FieldTitle = "title"
 	// FieldContent holds the string denoting the content field in the database.
 	FieldContent = "content"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
@@ -26,7 +24,6 @@ const (
 // Columns holds all SQL columns for note fields.
 var Columns = []string{
 	FieldID,
-	FieldTitle,
 	FieldContent,
 	FieldCreatedAt,
 	FieldUpdatedAt,
@@ -48,11 +45,6 @@ type OrderOption func(*sql.Selector)
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
-}
-
-// ByTitle orders the results by the title field.
-func ByTitle(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldTitle, opts...).ToFunc()
 }
 
 // ByContent orders the results by the content field.

@@ -33,7 +33,6 @@ type NoteMutation struct {
 	op            Op
 	typ           string
 	id            *int
-	title         *string
 	content       *string
 	created_at    *time.Time
 	updated_at    *time.Time
@@ -139,42 +138,6 @@ func (m *NoteMutation) IDs(ctx context.Context) ([]int, error) {
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
-}
-
-// SetTitle sets the "title" field.
-func (m *NoteMutation) SetTitle(s string) {
-	m.title = &s
-}
-
-// Title returns the value of the "title" field in the mutation.
-func (m *NoteMutation) Title() (r string, exists bool) {
-	v := m.title
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldTitle returns the old "title" field's value of the Note entity.
-// If the Note object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *NoteMutation) OldTitle(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldTitle is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldTitle requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldTitle: %w", err)
-	}
-	return oldValue.Title, nil
-}
-
-// ResetTitle resets all changes to the "title" field.
-func (m *NoteMutation) ResetTitle() {
-	m.title = nil
 }
 
 // SetContent sets the "content" field.
@@ -319,10 +282,7 @@ func (m *NoteMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *NoteMutation) Fields() []string {
-	fields := make([]string, 0, 4)
-	if m.title != nil {
-		fields = append(fields, note.FieldTitle)
-	}
+	fields := make([]string, 0, 3)
 	if m.content != nil {
 		fields = append(fields, note.FieldContent)
 	}
@@ -340,8 +300,6 @@ func (m *NoteMutation) Fields() []string {
 // schema.
 func (m *NoteMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case note.FieldTitle:
-		return m.Title()
 	case note.FieldContent:
 		return m.Content()
 	case note.FieldCreatedAt:
@@ -357,8 +315,6 @@ func (m *NoteMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *NoteMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case note.FieldTitle:
-		return m.OldTitle(ctx)
 	case note.FieldContent:
 		return m.OldContent(ctx)
 	case note.FieldCreatedAt:
@@ -374,13 +330,6 @@ func (m *NoteMutation) OldField(ctx context.Context, name string) (ent.Value, er
 // type.
 func (m *NoteMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case note.FieldTitle:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetTitle(v)
-		return nil
 	case note.FieldContent:
 		v, ok := value.(string)
 		if !ok {
@@ -451,9 +400,6 @@ func (m *NoteMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *NoteMutation) ResetField(name string) error {
 	switch name {
-	case note.FieldTitle:
-		m.ResetTitle()
-		return nil
 	case note.FieldContent:
 		m.ResetContent()
 		return nil

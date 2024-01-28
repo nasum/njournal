@@ -20,12 +20,6 @@ type NoteCreate struct {
 	hooks    []Hook
 }
 
-// SetTitle sets the "title" field.
-func (nc *NoteCreate) SetTitle(s string) *NoteCreate {
-	nc.mutation.SetTitle(s)
-	return nc
-}
-
 // SetContent sets the "content" field.
 func (nc *NoteCreate) SetContent(s string) *NoteCreate {
 	nc.mutation.SetContent(s)
@@ -78,9 +72,6 @@ func (nc *NoteCreate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (nc *NoteCreate) check() error {
-	if _, ok := nc.mutation.Title(); !ok {
-		return &ValidationError{Name: "title", err: errors.New(`ent: missing required field "Note.title"`)}
-	}
 	if _, ok := nc.mutation.Content(); !ok {
 		return &ValidationError{Name: "content", err: errors.New(`ent: missing required field "Note.content"`)}
 	}
@@ -116,10 +107,6 @@ func (nc *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 		_node = &Note{config: nc.config}
 		_spec = sqlgraph.NewCreateSpec(note.Table, sqlgraph.NewFieldSpec(note.FieldID, field.TypeInt))
 	)
-	if value, ok := nc.mutation.Title(); ok {
-		_spec.SetField(note.FieldTitle, field.TypeString, value)
-		_node.Title = value
-	}
 	if value, ok := nc.mutation.Content(); ok {
 		_spec.SetField(note.FieldContent, field.TypeString, value)
 		_node.Content = value

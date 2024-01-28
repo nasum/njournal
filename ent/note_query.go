@@ -261,12 +261,12 @@ func (nq *NoteQuery) Clone() *NoteQuery {
 // Example:
 //
 //	var v []struct {
-//		Title string `json:"title,omitempty"`
+//		Content string `json:"content,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Note.Query().
-//		GroupBy(note.FieldTitle).
+//		GroupBy(note.FieldContent).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (nq *NoteQuery) GroupBy(field string, fields ...string) *NoteGroupBy {
@@ -284,11 +284,11 @@ func (nq *NoteQuery) GroupBy(field string, fields ...string) *NoteGroupBy {
 // Example:
 //
 //	var v []struct {
-//		Title string `json:"title,omitempty"`
+//		Content string `json:"content,omitempty"`
 //	}
 //
 //	client.Note.Query().
-//		Select(note.FieldTitle).
+//		Select(note.FieldContent).
 //		Scan(ctx, &v)
 func (nq *NoteQuery) Select(fields ...string) *NoteSelect {
 	nq.ctx.Fields = append(nq.ctx.Fields, fields...)

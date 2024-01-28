@@ -13,7 +13,6 @@ type Note struct {
 // Fields of the Note.
 func (Note) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("title"),
 		field.String("content"),
 		field.Time("created_at"),
 		field.Time("updated_at"),
