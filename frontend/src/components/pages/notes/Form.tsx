@@ -1,31 +1,30 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { CallCreateNote } from "../../../lib/notes"
+import { useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
+import { CallGetNoteById, CallUpdateNote } from "../../../lib/notes"
+
 
 export const Form = () => {
   const [content, setContent] = useState("")
-  const navigate = useNavigate()
+
+  const { id } = useParams()
+
+  useEffect(() => {
+    if (Number(id) != 0){
+      CallGetNoteById(Number(id)).then(note => {
+        setContent(note.Content)
+      })
+    } 
+  }, [id])
 
   const handleChangeContent = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(event.target.value)
-  }
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    await CallCreateNote({
-      id: "",
-      content: content,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    })
-    navigate("/notes")
+    CallUpdateNote(Number(id), event.target.value)
   }
 
   return (
     <div id="Form">
-      <form onSubmit={handleSubmit}>
-        <textarea placeholder="Content" onChange={handleChangeContent} />
-        <button type="submit">Save</button>
+      <form>
+        <textarea placeholder="Content" onChange={handleChangeContent} value={content} />
       </form>
     </div>
   )

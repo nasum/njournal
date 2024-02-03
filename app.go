@@ -61,9 +61,21 @@ func (a *App) GetProjects() []string {
 	return []string{"Project 1", "Project 2"}
 }
 
+func (a *App) GetNote(id int) Note {
+	return a.noteService.GetNoteByID(id)
+}
+
 // Create note
 func (a *App) CreateNote(content string) Note {
 	note := a.noteService.Create(Note{Content: content})
+	return note
+}
+
+// Update note
+func (a *App) UpdateNote(id int, content string) Note {
+	note := a.noteService.GetNoteByID(id)
+	note.Content = content
+	a.noteService.Update(note)
 	return note
 }
 

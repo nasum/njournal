@@ -9,6 +9,10 @@ export function CreateProject(arg1:string):Promise<string>;
 
 export function GetDB():Promise<ent.Client>;
 
+export function GetNote(arg1:number):Promise<main.Note>;
+
 export function GetProjects():Promise<Array<string>>;
 
 export function ListNotes():Promise<Array<main.Note>>;
+
+export function UpdateNote(arg1:number,arg2:string):Promise<main.Note>;

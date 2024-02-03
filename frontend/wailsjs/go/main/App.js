@@ -14,10 +14,18 @@ export function GetDB() {
   return window['go']['main']['App']['GetDB']();
 }
 
+export function GetNote(arg1) {
+  return window['go']['main']['App']['GetNote'](arg1);
+}
+
 export function GetProjects() {
   return window['go']['main']['App']['GetProjects']();
 }
 
 export function ListNotes() {
   return window['go']['main']['App']['ListNotes']();
+}
+
+export function UpdateNote(arg1, arg2) {
+  return window['go']['main']['App']['UpdateNote'](arg1, arg2);
 }
