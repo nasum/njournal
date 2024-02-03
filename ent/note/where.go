@@ -69,6 +69,11 @@ func UpdatedAt(v time.Time) predicate.Note {
 	return predicate.Note(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
+// Deleted applies equality check predicate on the "deleted" field. It's identical to DeletedEQ.
+func Deleted(v bool) predicate.Note {
+	return predicate.Note(sql.FieldEQ(FieldDeleted, v))
+}
+
 // ContentEQ applies the EQ predicate on the "content" field.
 func ContentEQ(v string) predicate.Note {
 	return predicate.Note(sql.FieldEQ(FieldContent, v))
@@ -212,6 +217,16 @@ func UpdatedAtLT(v time.Time) predicate.Note {
 // UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
 func UpdatedAtLTE(v time.Time) predicate.Note {
 	return predicate.Note(sql.FieldLTE(FieldUpdatedAt, v))
+}
+
+// DeletedEQ applies the EQ predicate on the "deleted" field.
+func DeletedEQ(v bool) predicate.Note {
+	return predicate.Note(sql.FieldEQ(FieldDeleted, v))
+}
+
+// DeletedNEQ applies the NEQ predicate on the "deleted" field.
+func DeletedNEQ(v bool) predicate.Note {
+	return predicate.Note(sql.FieldNEQ(FieldDeleted, v))
 }
 
 // And groups predicates with the AND operator between them.

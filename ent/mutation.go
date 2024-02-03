@@ -36,6 +36,7 @@ type NoteMutation struct {
 	content       *string
 	created_at    *time.Time
 	updated_at    *time.Time
+	deleted       *bool
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*Note, error)
@@ -248,6 +249,42 @@ func (m *NoteMutation) ResetUpdatedAt() {
 	m.updated_at = nil
 }
 
+// SetDeleted sets the "deleted" field.
+func (m *NoteMutation) SetDeleted(b bool) {
+	m.deleted = &b
+}
+
+// Deleted returns the value of the "deleted" field in the mutation.
+func (m *NoteMutation) Deleted() (r bool, exists bool) {
+	v := m.deleted
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeleted returns the old "deleted" field's value of the Note entity.
+// If the Note object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *NoteMutation) OldDeleted(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeleted is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeleted requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeleted: %w", err)
+	}
+	return oldValue.Deleted, nil
+}
+
+// ResetDeleted resets all changes to the "deleted" field.
+func (m *NoteMutation) ResetDeleted() {
+	m.deleted = nil
+}
+
 // Where appends a list predicates to the NoteMutation builder.
 func (m *NoteMutation) Where(ps ...predicate.Note) {
 	m.predicates = append(m.predicates, ps...)
@@ -282,7 +319,7 @@ func (m *NoteMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *NoteMutation) Fields() []string {
-	fields := make([]string, 0, 3)
+	fields := make([]string, 0, 4)
 	if m.content != nil {
 		fields = append(fields, note.FieldContent)
 	}
@@ -291,6 +328,9 @@ func (m *NoteMutation) Fields() []string {
 	}
 	if m.updated_at != nil {
 		fields = append(fields, note.FieldUpdatedAt)
+	}
+	if m.deleted != nil {
+		fields = append(fields, note.FieldDeleted)
 	}
 	return fields
 }
@@ -306,6 +346,8 @@ func (m *NoteMutation) Field(name string) (ent.Value, bool) {
 		return m.CreatedAt()
 	case note.FieldUpdatedAt:
 		return m.UpdatedAt()
+	case note.FieldDeleted:
+		return m.Deleted()
 	}
 	return nil, false
 }
@@ -321,6 +363,8 @@ func (m *NoteMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldCreatedAt(ctx)
 	case note.FieldUpdatedAt:
 		return m.OldUpdatedAt(ctx)
+	case note.FieldDeleted:
+		return m.OldDeleted(ctx)
 	}
 	return nil, fmt.Errorf("unknown Note field %s", name)
 }
@@ -350,6 +394,13 @@ func (m *NoteMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedAt(v)
+		return nil
+	case note.FieldDeleted:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeleted(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Note field %s", name)
@@ -408,6 +459,9 @@ func (m *NoteMutation) ResetField(name string) error {
 		return nil
 	case note.FieldUpdatedAt:
 		m.ResetUpdatedAt()
+		return nil
+	case note.FieldDeleted:
+		m.ResetDeleted()
 		return nil
 	}
 	return fmt.Errorf("unknown Note field %s", name)

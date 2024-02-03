@@ -14,6 +14,7 @@ var (
 		{Name: "content", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "deleted", Type: field.TypeBool, Default: false},
 	}
 	// NotesTable holds the schema information for the "notes" table.
 	NotesTable = &schema.Table{

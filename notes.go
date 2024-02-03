@@ -2,6 +2,7 @@ package main
 
 import (
 	"changeme/ent"
+	"changeme/ent/note"
 	"context"
 	"time"
 
@@ -64,7 +65,11 @@ func (n *NotesService) GetNoteByID(id int) Note {
 }
 
 func (n *NotesService) Update(noteToUpdate Note) Note {
-	updatedNote, err := n.client.Note.UpdateOneID(noteToUpdate.ID).SetContent(noteToUpdate.Content).Save(n.ctx)
+	today := time.Now()
+	updatedNote, err := n.client.Note.UpdateOneID(noteToUpdate.ID).
+		SetContent(noteToUpdate.Content).
+		SetUpdatedAt(today).
+		Save(n.ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -80,7 +85,8 @@ func (n *NotesService) Search() string {
 }
 
 func (n *NotesService) List() []Note {
-	notes, err := n.client.Note.Query().All(n.ctx)
+	notes, err := n.client.Note.Query().Where(note.DeletedEQ(false)).Order(ent.Desc("updated_at")).All(n.ctx)
+
 	if err != nil {
 		panic(err)
 	}

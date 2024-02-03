@@ -17,6 +17,8 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
+	// FieldDeleted holds the string denoting the deleted field in the database.
+	FieldDeleted = "deleted"
 	// Table holds the table name of the note in the database.
 	Table = "notes"
 )
@@ -27,6 +29,7 @@ var Columns = []string{
 	FieldContent,
 	FieldCreatedAt,
 	FieldUpdatedAt,
+	FieldDeleted,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -38,6 +41,11 @@ func ValidColumn(column string) bool {
 	}
 	return false
 }
+
+var (
+	// DefaultDeleted holds the default value on creation for the "deleted" field.
+	DefaultDeleted bool
+)
 
 // OrderOption defines the ordering options for the Note queries.
 type OrderOption func(*sql.Selector)
@@ -60,4 +68,9 @@ func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedAt orders the results by the updated_at field.
 func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
+}
+
+// ByDeleted orders the results by the deleted field.
+func ByDeleted(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDeleted, opts...).ToFunc()
 }

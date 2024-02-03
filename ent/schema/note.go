@@ -16,6 +16,7 @@ func (Note) Fields() []ent.Field {
 		field.String("content"),
 		field.Time("created_at"),
 		field.Time("updated_at"),
+		field.Bool("deleted").Default(false),
 	}
 }
 

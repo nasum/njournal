@@ -70,6 +70,20 @@ func (nu *NoteUpdate) SetNillableUpdatedAt(t *time.Time) *NoteUpdate {
 	return nu
 }
 
+// SetDeleted sets the "deleted" field.
+func (nu *NoteUpdate) SetDeleted(b bool) *NoteUpdate {
+	nu.mutation.SetDeleted(b)
+	return nu
+}
+
+// SetNillableDeleted sets the "deleted" field if the given value is not nil.
+func (nu *NoteUpdate) SetNillableDeleted(b *bool) *NoteUpdate {
+	if b != nil {
+		nu.SetDeleted(*b)
+	}
+	return nu
+}
+
 // Mutation returns the NoteMutation object of the builder.
 func (nu *NoteUpdate) Mutation() *NoteMutation {
 	return nu.mutation
@@ -119,6 +133,9 @@ func (nu *NoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := nu.mutation.UpdatedAt(); ok {
 		_spec.SetField(note.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := nu.mutation.Deleted(); ok {
+		_spec.SetField(note.FieldDeleted, field.TypeBool, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, nu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -178,6 +195,20 @@ func (nuo *NoteUpdateOne) SetUpdatedAt(t time.Time) *NoteUpdateOne {
 func (nuo *NoteUpdateOne) SetNillableUpdatedAt(t *time.Time) *NoteUpdateOne {
 	if t != nil {
 		nuo.SetUpdatedAt(*t)
+	}
+	return nuo
+}
+
+// SetDeleted sets the "deleted" field.
+func (nuo *NoteUpdateOne) SetDeleted(b bool) *NoteUpdateOne {
+	nuo.mutation.SetDeleted(b)
+	return nuo
+}
+
+// SetNillableDeleted sets the "deleted" field if the given value is not nil.
+func (nuo *NoteUpdateOne) SetNillableDeleted(b *bool) *NoteUpdateOne {
+	if b != nil {
+		nuo.SetDeleted(*b)
 	}
 	return nuo
 }
@@ -261,6 +292,9 @@ func (nuo *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) 
 	}
 	if value, ok := nuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(note.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := nuo.mutation.Deleted(); ok {
+		_spec.SetField(note.FieldDeleted, field.TypeBool, value)
 	}
 	_node = &Note{config: nuo.config}
 	_spec.Assign = _node.assignValues

@@ -45,7 +45,10 @@ export const List = () => {
   return (
     <ul>
       {note?.notes.map(note => (
-        <li key={note.ID}><Link to={`${note.ID}`}>{note.ID}: {note.Content}</Link></li>
+        <li key={note.ID}>
+          <Link to={`${note.ID}`}>{note.ID}: {note.Content}</Link> 
+          <span>{note.UpdatedAt}</span>
+        </li>
       ))}
     </ul>
   )

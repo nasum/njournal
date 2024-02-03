@@ -38,6 +38,20 @@ func (nc *NoteCreate) SetUpdatedAt(t time.Time) *NoteCreate {
 	return nc
 }
 
+// SetDeleted sets the "deleted" field.
+func (nc *NoteCreate) SetDeleted(b bool) *NoteCreate {
+	nc.mutation.SetDeleted(b)
+	return nc
+}
+
+// SetNillableDeleted sets the "deleted" field if the given value is not nil.
+func (nc *NoteCreate) SetNillableDeleted(b *bool) *NoteCreate {
+	if b != nil {
+		nc.SetDeleted(*b)
+	}
+	return nc
+}
+
 // Mutation returns the NoteMutation object of the builder.
 func (nc *NoteCreate) Mutation() *NoteMutation {
 	return nc.mutation
@@ -45,6 +59,7 @@ func (nc *NoteCreate) Mutation() *NoteMutation {
 
 // Save creates the Note in the database.
 func (nc *NoteCreate) Save(ctx context.Context) (*Note, error) {
+	nc.defaults()
 	return withHooks(ctx, nc.sqlSave, nc.mutation, nc.hooks)
 }
 
@@ -70,6 +85,14 @@ func (nc *NoteCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (nc *NoteCreate) defaults() {
+	if _, ok := nc.mutation.Deleted(); !ok {
+		v := note.DefaultDeleted
+		nc.mutation.SetDeleted(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (nc *NoteCreate) check() error {
 	if _, ok := nc.mutation.Content(); !ok {
@@ -80,6 +103,9 @@ func (nc *NoteCreate) check() error {
 	}
 	if _, ok := nc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Note.updated_at"`)}
+	}
+	if _, ok := nc.mutation.Deleted(); !ok {
+		return &ValidationError{Name: "deleted", err: errors.New(`ent: missing required field "Note.deleted"`)}
 	}
 	return nil
 }
@@ -119,6 +145,10 @@ func (nc *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 		_spec.SetField(note.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := nc.mutation.Deleted(); ok {
+		_spec.SetField(note.FieldDeleted, field.TypeBool, value)
+		_node.Deleted = value
+	}
 	return _node, _spec
 }
 
@@ -140,6 +170,7 @@ func (ncb *NoteCreateBulk) Save(ctx context.Context) ([]*Note, error) {
 	for i := range ncb.builders {
 		func(i int, root context.Context) {
 			builder := ncb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*NoteMutation)
 				if !ok {
