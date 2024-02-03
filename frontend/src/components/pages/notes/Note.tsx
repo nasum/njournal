@@ -1,5 +1,5 @@
 import { useEffect, useState, createContext, useContext } from "react"
-import { useNavigate, Link, Outlet } from "react-router-dom"
+import { useNavigate, useParams, Link, Outlet } from "react-router-dom"
 import { useNotes, NoteHookType } from "../../../hooks/useNotes"
 
 const NoteContext = createContext<NoteHookType | null>(null)
@@ -36,7 +36,6 @@ export const Notes = () => {
 }
 
 export const List = () => {
-
   const note = useContext(NoteContext)
 
   useEffect(() => {
@@ -49,5 +48,36 @@ export const List = () => {
         <li key={note.ID}><Link to={`${note.ID}`}>{note.ID}: {note.Content}</Link></li>
       ))}
     </ul>
+  )
+}
+
+
+export const Form = () => {
+  const note = useContext(NoteContext)
+  const [content, setContent] = useState("")
+
+  const { id } = useParams()
+
+  useEffect(() => {
+    if (Number(id) != 0){
+      note?.getNote(Number(id)).then(n => {
+        if (n) {
+          setContent(n.Content)
+        }
+      })
+    } 
+  }, [id])
+
+  const handleChangeContent = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setContent(event.target.value)
+    note?.updateNote(Number(id), event.target.value)
+  }
+
+  return (
+    <div id="Form">
+      <form>
+        <textarea placeholder="Content" onChange={handleChangeContent} value={content} />
+      </form>
+    </div>
   )
 }
