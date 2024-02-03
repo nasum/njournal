@@ -6,9 +6,8 @@ import {
 } from "react-router-dom";
 
 import App from './App'
-import { Notes } from './components/pages/notes/Note';
+import { Notes, List } from './components/pages/notes/Note';
 import { Form } from './components/pages/notes/Form';
-import { List } from './components/pages/notes/List';
 import '@acab/reset.css';
 
 const container = document.getElementById('root')
