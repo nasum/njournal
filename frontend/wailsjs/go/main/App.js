@@ -6,20 +6,12 @@ export function CreateNote(arg1) {
   return window['go']['main']['App']['CreateNote'](arg1);
 }
 
-export function CreateProject(arg1) {
-  return window['go']['main']['App']['CreateProject'](arg1);
-}
-
 export function GetDB() {
   return window['go']['main']['App']['GetDB']();
 }
 
 export function GetNote(arg1) {
   return window['go']['main']['App']['GetNote'](arg1);
-}
-
-export function GetProjects() {
-  return window['go']['main']['App']['GetProjects']();
 }
 
 export function ListNotes() {

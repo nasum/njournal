@@ -5,13 +5,9 @@ import {ent} from '../models';
 
 export function CreateNote(arg1:string):Promise<main.Note>;
 
-export function CreateProject(arg1:string):Promise<string>;
-
 export function GetDB():Promise<ent.Client>;
 
 export function GetNote(arg1:number):Promise<main.Note>;
-
-export function GetProjects():Promise<Array<string>>;
 
 export function ListNotes():Promise<Array<main.Note>>;
 
