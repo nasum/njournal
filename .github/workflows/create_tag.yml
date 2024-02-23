@@ -34,7 +34,9 @@ jobs:
           echo "EXISTS=no" >> $GITHUB_OUTPUT
         fi
     - name: Create and push tag
-      uses: laputansoft/github-tag-action@v4.6
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        tag: ${{ steps.get_version.outputs.VERSION }}
+      if: steps.check_tag.outputs.EXISTS == 'no'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git tag ${{ steps.get_version.outputs.VERSION }}
+        git push origin ${{ steps.get_version.outputs.VERSION }}
