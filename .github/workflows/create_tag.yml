@@ -15,10 +15,6 @@ jobs:
 
     - name: Install jq
       run: sudo apt-get install jq
-
-    - name: Extract version from JSON
-      id: get_version
-      run: echo "VERSION=$(jq -r '.info.productVersion' wails.json) >> $GITHUB_OUTPUT"
       
     - name: Set up Git config
       run: |
@@ -28,11 +24,17 @@ jobs:
     - name: Check if tag already exists
       id: check_tag
       run: |
-        if git rev-parse ${{ steps.get_version.outputs.VERSION }} >/dev/null 2>&1; then
+        if git rev-parse $(jq -r '.info.productVersion' wails.json) >/dev/null 2>&1; then
           echo "EXISTS=yes" >> $GITHUB_OUTPUT
         else
           echo "EXISTS=no" >> $GITHUB_OUTPUT
         fi
+
+    
+    - name: Extract version from JSON
+      id: get_version
+      run: echo "VERSION=$(jq -r '.info.productVersion' wails.json) >> $GITHUB_OUTPUT"
+    
     - name: Create and push tag
       if: steps.check_tag.outputs.EXISTS == 'no'
       env:
