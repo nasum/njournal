@@ -71,9 +71,6 @@ func saveConfig(configPath string, appConfig AppConfig) error {
 
 func loadConfig(configPath string) (*AppConfig, error) {
 	bytes, err := os.ReadFile(configPath)
-
-	var appConfig AppConfig
-
 	if _, ok := err.(*os.PathError); ok {
 		// Create the config file
 		dataPath, err := xdg.DataFile("njournal/data/njournal.db")
@@ -82,18 +79,20 @@ func loadConfig(configPath string) (*AppConfig, error) {
 			return nil, fmt.Errorf("Error getting data path: %s", err)
 		}
 
-		appConfig = AppConfig{
+		appConfig := AppConfig{
 			Width:        800,
 			Height:       600,
 			DataBasePath: dataPath,
 		}
 
-		saveConfig(configPath, appConfig)
+		if err := saveConfig(configPath, appConfig); err != nil {
+			return nil, err
+		}
+
+		return &appConfig, nil
 	}
 
-	if err != nil {
-		return nil, fmt.Errorf("Error reading config file: %s", err)
-	}
+	var appConfig AppConfig
 
 	if err := json.Unmarshal(bytes, &appConfig); err != nil {
 		return nil, fmt.Errorf("Error unmarshalling config file: %s", err)
