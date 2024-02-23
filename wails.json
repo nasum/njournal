@@ -10,5 +10,9 @@
   "author": {
     "name": "nasum",
     "email": "tomato.wonder.life@gmail.com"
+  },
+  "info": {
+    "productName": "njournal",
+    "productVersion": "0.0.1"
   }
 }
