@@ -8,6 +8,7 @@ toolchain go1.22.0
 
 require (
 	entgo.io/ent v0.12.5
+	github.com/adrg/xdg v0.4.0
 	github.com/mattn/go-sqlite3 v1.14.16
 	github.com/wailsapp/wails/v2 v2.8.0
 )

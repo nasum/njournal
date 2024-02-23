@@ -3,6 +3,7 @@ package main
 import (
 	"changeme/ent"
 	"context"
+	"fmt"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 
@@ -14,11 +15,14 @@ type App struct {
 	ctx         context.Context
 	client      *ent.Client
 	noteService *NotesService
+	config      *AppConfig
 }
 
 // NewApp creates a new App application struct
-func NewApp() *App {
-	return &App{}
+func NewApp(appConfig *AppConfig) *App {
+	return &App{
+		config: appConfig,
+	}
 }
 
 // startup is called when the app starts. The context is saved
@@ -31,6 +35,7 @@ func (a *App) startup(ctx context.Context) {
 	runtime.LogDebug(a.ctx, "Startup called")
 	runtime.LogDebug(a.ctx, "Build Type: "+env.BuildType)
 	runtime.LogDebug(a.ctx, "Loading DB")
+
 	a.client, err = a.GetDB()
 
 	if err != nil {
@@ -45,7 +50,11 @@ func (a *App) startup(ctx context.Context) {
 }
 
 func (a *App) GetDB() (*ent.Client, error) {
-	client, err := ent.Open("sqlite3", "file:njournal.db?mode=rwc&cache=shared&_fk=1")
+	databaseSetup := fmt.Sprintf("file:%snjournal.db?mode=rwc&cache=shared&_fk=1", a.config.DataBasePath)
+
+	runtime.LogDebug(a.ctx, "Database setup: "+databaseSetup)
+
+	client, err := ent.Open("sqlite3", databaseSetup)
 	if err != nil {
 		return nil, err
 	}
