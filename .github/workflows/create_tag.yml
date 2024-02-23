@@ -18,7 +18,7 @@ jobs:
 
     - name: Extract version from JSON
       id: get_version
-      run: echo "::set-output name=VERSION::$(jq -r '.info.productVersion' wails.json)"
+      run: echo "VERSION=$(jq -r '.info.productVersion' wails.json) >> $GITHUB_OUTPUT"
       
     - name: Set up Git config
       run: |
@@ -29,9 +29,9 @@ jobs:
       id: check_tag
       run: |
         if git rev-parse ${{ steps.get_version.outputs.VERSION }} >/dev/null 2>&1; then
-          echo "::set-output name=EXISTS::yes"
+          echo "EXISTS=yes" >> $GITHUB_OUTPUT
         else
-          echo "::set-output name=EXISTS::no"
+          echo "EXISTS=no" >> $GITHUB_OUTPUT
         fi
     - name: Create and push tag
       uses: laputansoft/github-tag-action@v4.6
