@@ -60,12 +60,10 @@ export const List = () => {
   return (
     <ul>
       {note?.notes.map(note => (
-        <li key={note.ID}>
-          <ListItem>
-            <Link to={`${note.ID}`}>{note.ID}: {note.Content}</Link> 
-            <span>{note.UpdatedAt}</span>
-          </ListItem>
-        </li>
+        <ListItem key={note.ID}>
+          <Link to={`${note.ID}`}>{note.ID}: {note.Content}</Link> 
+          <span>{note.UpdatedAt}</span>
+        </ListItem>
       ))}
     </ul>
   )

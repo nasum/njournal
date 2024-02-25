@@ -13,14 +13,11 @@ jobs:
       fail-fast: false
       matrix:
         build:
-          - name: 'njournal'
-            platform:  'linux/amd64'
+          - platform:  'linux/amd64'
             os: 'ubuntu-latest'
-          - name: 'njournal'
-            platform:  'windows/amd64'
+          - platform:  'windows/amd64'
             os: 'windows-latest'
-          - name: 'njournal'
-            platform:  'darwin/universal'
+          - platform:  'darwin/universal'
             os: 'macos-latest'
 
     runs-on: ${{ matrix.build.os }}
@@ -34,7 +31,8 @@ jobs:
         uses: dAppServer/wails-build-action@v2.2
         id: build
         with:
-          build-name: ${{ matrix.build.name }}
+          build-name: 'njournal'
           build-platform: ${{ matrix.build.platform }}
           package: true
           go-version: '1.22'
+          node-version: '20.11.1'
