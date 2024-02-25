@@ -1,9 +1,8 @@
 name: Wails build
 
 on:
-  push:
-    tags:
-      - '*'
+  repository_dispatch:
+    types: [build-app]
 
 env:
   NODE_OPTIONS: "--max-old-space-size=4096"
