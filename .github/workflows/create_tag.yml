@@ -33,13 +33,8 @@ jobs:
     - name: Create and push tag
       if: steps.check_tag.outputs.EXISTS == 'no'
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PAT: ${{ secrets.PAT }}
       run: |
         VERSION=$(jq -r '.info.productVersion' wails.json)
         git tag $VERSION
-        git push https://${{ secrets.GITHUB_TOKEN }}@github.com/nasum/njournal.git $VERSION
-        curl -X POST \
-          -H "Accept: application/vnd.github.v3+json" \
-          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/nasum/njournal/dispatches \
-          -d '{"event_type": "build-app"}'
+        git push https://$PAT@github.com/nasum/njournal.git $VERSION
