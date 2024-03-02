@@ -20,7 +20,7 @@ const linkStyle = {
 
 export const SideBar = () => {
   return (
-    <SideBarContent id="AppHeader">
+    <SideBarContent id="AppSidebar">
       <SideBarHeader>njournal</SideBarHeader>
       <ul>
         <li>

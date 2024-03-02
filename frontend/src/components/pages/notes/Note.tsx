@@ -53,6 +53,20 @@ export const List = () => {
     justify-content: space-between;
   `
 
+  const Title = styled.div`
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 500px;
+  `
+
+  const DateArea = ({date}: {date:string}) => {
+    const datetime = new Date(date).toLocaleString()
+    return (
+      <span>{datetime}</span>
+    )
+  }
+
   useEffect(() => {
     note?.readNotes()
   }, [])
@@ -61,8 +75,8 @@ export const List = () => {
     <ul>
       {note?.notes.map(note => (
         <ListItem key={note.ID}>
-          <Link to={`${note.ID}`}>{note.ID}: {note.Content}</Link> 
-          <span>{note.UpdatedAt}</span>
+          <Link to={`${note.ID}`}><Title>{note.Content}</Title></Link> 
+          <DateArea date={note.UpdatedAt || ""} />
         </ListItem>
       ))}
     </ul>
