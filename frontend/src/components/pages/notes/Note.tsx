@@ -2,6 +2,7 @@ import { useEffect, useState, createContext, useContext } from "react"
 import { useNavigate, useParams, Link, Outlet } from "react-router-dom"
 import styled from "styled-components"
 
+import { Editor } from "../../common/Editor"
 import { useNotes, NoteHookType } from "../../../hooks/useNotes"
 
 const NoteContainer = styled.div`
@@ -75,7 +76,7 @@ export const List = () => {
     <ul>
       {note?.notes.map(note => (
         <ListItem key={note.ID}>
-          <Link to={`${note.ID}`}><Title>{note.Content}</Title></Link> 
+          <Link to={`${note.ID}`}><Title>{note.Content || "no contents"}</Title></Link> 
           <DateArea date={note.UpdatedAt || ""} />
         </ListItem>
       ))}
@@ -83,31 +84,9 @@ export const List = () => {
   )
 }
 
-type EditorProps = {
-  content: string
-  updateNote: (content: string) => void
-}
-
-const Editor = ({content, updateNote}: EditorProps) => {
-  const [value, setValue] = useState(content)
-
-  useEffect(() => {
-    setValue(content);
-  }, [content]);
-
-  const handleChange = (event: any) => {
-    setValue(event.target.value)
-    updateNote(event.target.value)
-  }
-
-  return (
-    <textarea style={{width: "100%", height: "100%", resize: "none"}} value={value} onChange={handleChange} />
-  )
-}
-
 export const Form = () => {
   const note = useContext(NoteContext)
-  const [content, setContent] = useState("")
+  const [content, setContent] = useState<string | null>(null)
 
   const { id } = useParams()
 
@@ -126,6 +105,6 @@ export const Form = () => {
   }
 
   return (
-    <Editor content={content} updateNote={handleUpdateNote} />
+    content !== null ? (<Editor content={content} updateNote={handleUpdateNote} />) : null
   )
 }
