@@ -16,6 +16,7 @@ import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
+import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
 import CodeHighlightPlugin from "./plugins/CodeHighlight";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { EditorState } from "lexical";
@@ -39,6 +40,7 @@ const PlainTextEditor = styled.textarea`
 `;
 
 const EditorContainer = styled.div`
+	position: relative;
   :where(ul) {
     list-style: disc;
   }
@@ -58,6 +60,13 @@ const EditorActionsButton = styled.button`
 	border-radius: 5px;
 `;
 
+const PlaceholderContent = styled.div`
+	position: absolute;
+	padding: 10px;
+	top: 20px;
+	pointer-events: none;
+`;
+
 type EditorProps = {
 	content: string;
 	updateNote: (content: string) => void;
@@ -70,9 +79,9 @@ export const Editor = ({ content, updateNote }: EditorProps) => {
 	const [isRitchText, setIsRitchText] = useState(true);
 	const Placeholder = () => {
 		return (
-			<div className="editor-placeholder">
-				Play around with the Markdown plugin...
-			</div>
+			<PlaceholderContent className="editor-placeholder">
+				Please type your note here...
+			</PlaceholderContent>
 		);
 	};
 
@@ -142,6 +151,7 @@ export const Editor = ({ content, updateNote }: EditorProps) => {
 						<MarkdownShortcutPlugin transformers={ExtendedTransformer} />
 						<OnChangePlugin onChange={handleEditorChange} />
 						<CodeHighlightPlugin />
+						<TabIndentationPlugin />
 					</EditorContainer>
 				</LexicalComposer>
 			) : (

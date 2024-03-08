@@ -8,5 +8,9 @@ export const Theme: EditorThemeClasses = {
 		listitem: "EditorTheme__listItem",
 		listitemChecked: "EditorTheme__listItemChecked",
 		listitemUnchecked: "EditorTheme__listItemUnchecked",
+		nested: {
+			list: "EditorTheme__nestedList",
+			listitem: "EditorTheme__nestedListItem",
+		},
 	},
 };

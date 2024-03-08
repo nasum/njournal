@@ -68,7 +68,15 @@
   border-width: 0 2px 2px 0;
 }
 
+.EditorTheme__nestedListItem {
+  list-style-type: none;
+}
+.EditorTheme__nestedListItem:before,
+.EditorTheme__nestedListItem:after {
+  display: none;
+}
+
 .editor-input {
-  padding-top: 25px;
+  padding: 25px 0;
   outline: none;
 }

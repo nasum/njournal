@@ -24,12 +24,12 @@ export const SideBar = () => {
 			<SideBarHeader>njournal</SideBarHeader>
 			<ul>
 				<li>
-					<Link style={linkStyle} to="/">
+					<Link tabIndex={0} style={linkStyle} to="/">
 						Home
 					</Link>
 				</li>
 				<li>
-					<Link style={linkStyle} to="/notes">
+					<Link tabIndex={0} style={linkStyle} to="/notes">
 						Notes
 					</Link>
 				</li>
