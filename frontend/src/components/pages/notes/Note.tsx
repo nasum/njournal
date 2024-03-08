@@ -86,8 +86,8 @@ export const Form = () => {
 		}
 	}, [id]);
 
-	const handleUpdateNote = (content: string) => {
-		note?.updateNote(Number(id), content);
+	const handleUpdateNote = (updatedContent: string) => {
+		note?.updateNote(Number(id), updatedContent);
 	};
 
 	return content !== null ? (

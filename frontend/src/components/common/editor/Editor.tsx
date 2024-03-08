@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
@@ -85,11 +85,14 @@ export const Editor = ({ content, updateNote }: EditorProps) => {
 		);
 	};
 
+	useEffect(() => {
+		updateNote(value);
+	}, [value]);
+
 	const handleEditorChange = (editor: EditorState) => {
 		editor.read(() => {
 			const markdown = $convertToMarkdownString(ExtendedTransformer);
 			setValue(markdown);
-			updateNote(markdown);
 		});
 	};
 
@@ -97,7 +100,6 @@ export const Editor = ({ content, updateNote }: EditorProps) => {
 		event: React.ChangeEvent<HTMLTextAreaElement>,
 	) => {
 		setValue(event.target.value);
-		updateNote(event.target.value);
 	};
 
 	const editorConfig = {
