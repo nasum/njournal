@@ -15,12 +15,12 @@ import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
-import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
+import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { EditorState } from "lexical";
 import {
-  $convertFromMarkdownString,
-  $convertToMarkdownString,
-  TRANSFORMERS
+	$convertFromMarkdownString,
+	$convertToMarkdownString,
+	TRANSFORMERS,
 } from "@lexical/markdown";
 
 import "github-markdown-css";
@@ -32,71 +32,69 @@ const EditorContainer = styled.div`
   :where(ol) {
     list-style: decimal;
   }
-`
+`;
 
 type EditorProps = {
-  content: string
-  updateNote: (content: string) => void
-}
+	content: string;
+	updateNote: (content: string) => void;
+};
 
-export const Editor = ({content, updateNote}: EditorProps) => {
-  const [value, setValue] = useState(content);
-  const Placeholder = () => {
-    return (
-      <div className="editor-placeholder">
-        Play around with the Markdown plugin...
-      </div>
-    );
-  }
+export const Editor = ({ content, updateNote }: EditorProps) => {
+	const [value, setValue] = useState(content);
+	const Placeholder = () => {
+		return (
+			<div className="editor-placeholder">
+				Play around with the Markdown plugin...
+			</div>
+		);
+	};
 
-  const handleEditorChange = (editor: EditorState) => {
-    editor.read(() => {
-      const markdown = $convertToMarkdownString(TRANSFORMERS);
-      setValue(markdown);
-      updateNote(markdown);
-    })
-  }
+	const handleEditorChange = (editor: EditorState) => {
+		editor.read(() => {
+			const markdown = $convertToMarkdownString(TRANSFORMERS);
+			setValue(markdown);
+			updateNote(markdown);
+		});
+	};
 
-  const editorConfig  = {
-    namespace: 'editor',
-    editorState: () => {
-      console.log("editorState")
-      console.log("content", content)
-      $convertFromMarkdownString(content, TRANSFORMERS)
-    },
-    nodes: [
-      HeadingNode,
-      ListNode,
-      ListItemNode,
-      QuoteNode,
-      CodeNode,
-      CodeHighlightNode,
-      TableNode,
-      TableCellNode,
-      TableRowNode,
-      AutoLinkNode,
-      LinkNode
-    ],
-    onError: (err: any) => {
-      console.error(err);
-    }
-  };
+	const editorConfig = {
+		namespace: "editor",
+		editorState: () => {
+			$convertFromMarkdownString(content, TRANSFORMERS);
+		},
+		nodes: [
+			HeadingNode,
+			ListNode,
+			ListItemNode,
+			QuoteNode,
+			CodeNode,
+			CodeHighlightNode,
+			TableNode,
+			TableCellNode,
+			TableRowNode,
+			AutoLinkNode,
+			LinkNode,
+		],
+		onError: (err: any) => {
+			console.error(err);
+		},
+	};
 
-  return (
-    <LexicalComposer initialConfig={editorConfig}>
-      <EditorContainer className="editor-container markdown-body">
-        <RichTextPlugin
-          contentEditable={<ContentEditable className="editor-input" />}
-          placeholder={<Placeholder />}
-          ErrorBoundary={LexicalErrorBoundary}
-        />
-        <AutoFocusPlugin />
-        <ListPlugin />
-        <LinkPlugin />
-        <HistoryPlugin />
-        <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
-        <OnChangePlugin onChange={handleEditorChange} />
-      </EditorContainer>
-    </LexicalComposer>
-  )
-}
+	return (
+		<LexicalComposer initialConfig={editorConfig}>
+			<EditorContainer className="editor-container markdown-body">
+				<RichTextPlugin
+					contentEditable={<ContentEditable className="editor-input" />}
+					placeholder={<Placeholder />}
+					ErrorBoundary={LexicalErrorBoundary}
+				/>
+				<AutoFocusPlugin />
+				<ListPlugin />
+				<LinkPlugin />
+				<HistoryPlugin />
+				<MarkdownShortcutPlugin transformers={TRANSFORMERS} />
+				<OnChangePlugin onChange={handleEditorChange} />
+			</EditorContainer>
+		</LexicalComposer>
+	);
+};
