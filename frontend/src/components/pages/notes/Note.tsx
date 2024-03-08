@@ -2,7 +2,7 @@ import { useEffect, useState, createContext, useContext } from "react";
 import { useNavigate, useParams, Link, Outlet } from "react-router-dom";
 import styled from "styled-components";
 
-import { Editor } from "../../common/Editor";
+import { Editor } from "../../common/editor/Editor";
 import { useNotes, NoteHookType } from "../../../hooks/useNotes";
 
 const NoteContainer = styled.div`

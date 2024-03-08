@@ -7,7 +7,7 @@
     "node": ">=20.11.1"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "npm run format && vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "format": "biome format --write ./src"

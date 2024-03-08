@@ -10,18 +10,23 @@ import { TableCellNode, TableNode, TableRowNode } from "@lexical/table";
 import { ListItemNode, ListNode } from "@lexical/list";
 import { CodeHighlightNode, CodeNode } from "@lexical/code";
 import { AutoLinkNode, LinkNode } from "@lexical/link";
+import { CheckListPlugin } from "@lexical/react/LexicalCheckListPlugin";
 import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
+import CodeHighlightPlugin from "./plugins/CodeHighlight";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { EditorState } from "lexical";
 import {
 	$convertFromMarkdownString,
 	$convertToMarkdownString,
+	CHECK_LIST,
+	CODE,
 	TRANSFORMERS,
 } from "@lexical/markdown";
+import { Theme } from "./theme/Theme";
 
 import "github-markdown-css";
 
@@ -39,6 +44,8 @@ type EditorProps = {
 	updateNote: (content: string) => void;
 };
 
+const ExtendedTransformer = [CHECK_LIST, ...TRANSFORMERS, CODE];
+
 export const Editor = ({ content, updateNote }: EditorProps) => {
 	const [value, setValue] = useState(content);
 	const Placeholder = () => {
@@ -51,7 +58,7 @@ export const Editor = ({ content, updateNote }: EditorProps) => {
 
 	const handleEditorChange = (editor: EditorState) => {
 		editor.read(() => {
-			const markdown = $convertToMarkdownString(TRANSFORMERS);
+			const markdown = $convertToMarkdownString(ExtendedTransformer);
 			setValue(markdown);
 			updateNote(markdown);
 		});
@@ -60,7 +67,7 @@ export const Editor = ({ content, updateNote }: EditorProps) => {
 	const editorConfig = {
 		namespace: "editor",
 		editorState: () => {
-			$convertFromMarkdownString(content, TRANSFORMERS);
+			$convertFromMarkdownString(content, ExtendedTransformer);
 		},
 		nodes: [
 			HeadingNode,
@@ -78,6 +85,7 @@ export const Editor = ({ content, updateNote }: EditorProps) => {
 		onError: (err: any) => {
 			console.error(err);
 		},
+		theme: Theme,
 	};
 
 	return (
@@ -90,10 +98,12 @@ export const Editor = ({ content, updateNote }: EditorProps) => {
 				/>
 				<AutoFocusPlugin />
 				<ListPlugin />
+				<CheckListPlugin />
 				<LinkPlugin />
 				<HistoryPlugin />
-				<MarkdownShortcutPlugin transformers={TRANSFORMERS} />
+				<MarkdownShortcutPlugin transformers={ExtendedTransformer} />
 				<OnChangePlugin onChange={handleEditorChange} />
+				<CodeHighlightPlugin />
 			</EditorContainer>
 		</LexicalComposer>
 	);
