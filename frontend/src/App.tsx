@@ -1,7 +1,10 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { SideBar } from "./components/common/SideBar";
+import { ActionButton } from "./components/common/ActionButton";
+
+import { useNotes } from "./hooks/useNotes";
 
 const AppContainer = styled.div`
   display: flex;
@@ -18,12 +21,28 @@ const MainContainer = styled.main`
 `;
 
 function App() {
+	const navigate = useNavigate();
+	const note = useNotes();
+
+	if (!note) {
+		return null;
+	}
+
+	const craeteNote = () => {
+		note.createNote("").then((note) => {
+			if (note) {
+				navigate(`/notes/${note.ID}`);
+			}
+		});
+	};
+
 	return (
 		<AppContainer id="App">
 			<SideBar />
 			<MainContainer>
 				<Outlet />
 			</MainContainer>
+			<ActionButton createNote={craeteNote} />
 		</AppContainer>
 	);
 }

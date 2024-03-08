@@ -1,5 +1,5 @@
 import { useEffect, useState, createContext, useContext } from "react";
-import { useNavigate, useParams, Link, Outlet } from "react-router-dom";
+import { useParams, Link, Outlet } from "react-router-dom";
 import styled from "styled-components";
 
 import { Editor } from "../../common/editor/Editor";
@@ -15,29 +15,14 @@ const NoteContainer = styled.div`
 const NoteContext = createContext<NoteHookType | null>(null);
 
 export const Notes = () => {
-	const navigate = useNavigate();
 	const note = useNotes();
 
 	if (!note) {
 		return null;
 	}
 
-	const handleClick = (event: any) => {
-		event.preventDefault();
-
-		note.createNote("").then((note) => {
-			if (note) {
-				navigate(`/notes/${note.ID}`);
-			}
-		});
-	};
-
 	return (
 		<NoteContainer id="Notes">
-			<h1>Notes</h1>
-			<Link to="#" onClick={handleClick}>
-				New
-			</Link>
 			<div style={{ flex: 1 }} className="content">
 				<NoteContext.Provider value={note}>
 					<Outlet />
