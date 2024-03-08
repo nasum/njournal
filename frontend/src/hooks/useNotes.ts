@@ -67,8 +67,13 @@ export const useNotes = (): NoteHookType => {
 	const updateNote = async (id: number, content: string) => {
 		try {
 			setLoading(true);
-			await CallUpdateNote(id, content);
-			await readNotes();
+
+			const targetNote = notes.find((note) => note.ID == String(id));
+
+			if (targetNote?.Content !== content) {
+				await CallUpdateNote(id, content);
+				await readNotes();
+			}
 		} catch (e) {
 			console.error(e);
 		} finally {
