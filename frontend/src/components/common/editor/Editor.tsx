@@ -30,6 +30,14 @@ import { Theme } from "./theme/Theme";
 
 import "github-markdown-css";
 
+const PlainTextEditor = styled.textarea`
+	width: 100%;
+	height: 100%;
+	&:focus {
+		outline: none;
+	}
+`;
+
 const EditorContainer = styled.div`
   :where(ul) {
     list-style: disc;
@@ -37,6 +45,17 @@ const EditorContainer = styled.div`
   :where(ol) {
     list-style: decimal;
   }
+`;
+
+const EditorActions = styled.div`
+	display: flex;
+	justify-content: space-between;
+`;
+
+const EditorActionsButton = styled.button`
+	padding: 10px;
+	border: 1px solid #000;
+	border-radius: 5px;
 `;
 
 type EditorProps = {
@@ -48,6 +67,7 @@ const ExtendedTransformer = [CHECK_LIST, ...TRANSFORMERS, CODE];
 
 export const Editor = ({ content, updateNote }: EditorProps) => {
 	const [value, setValue] = useState(content);
+	const [isRitchText, setIsRitchText] = useState(true);
 	const Placeholder = () => {
 		return (
 			<div className="editor-placeholder">
@@ -64,10 +84,17 @@ export const Editor = ({ content, updateNote }: EditorProps) => {
 		});
 	};
 
+	const handlePlainEditorChange = (
+		event: React.ChangeEvent<HTMLTextAreaElement>,
+	) => {
+		setValue(event.target.value);
+		updateNote(event.target.value);
+	};
+
 	const editorConfig = {
 		namespace: "editor",
 		editorState: () => {
-			$convertFromMarkdownString(content, ExtendedTransformer);
+			$convertFromMarkdownString(value || content, ExtendedTransformer);
 		},
 		nodes: [
 			HeadingNode,
@@ -88,23 +115,38 @@ export const Editor = ({ content, updateNote }: EditorProps) => {
 		theme: Theme,
 	};
 
+	const handleChangeEditorType = () => {
+		setIsRitchText(!isRitchText);
+	};
+
 	return (
-		<LexicalComposer initialConfig={editorConfig}>
-			<EditorContainer className="editor-container markdown-body">
-				<RichTextPlugin
-					contentEditable={<ContentEditable className="editor-input" />}
-					placeholder={<Placeholder />}
-					ErrorBoundary={LexicalErrorBoundary}
-				/>
-				<AutoFocusPlugin />
-				<ListPlugin />
-				<CheckListPlugin />
-				<LinkPlugin />
-				<HistoryPlugin />
-				<MarkdownShortcutPlugin transformers={ExtendedTransformer} />
-				<OnChangePlugin onChange={handleEditorChange} />
-				<CodeHighlightPlugin />
-			</EditorContainer>
-		</LexicalComposer>
+		<>
+			<EditorActions>
+				<EditorActionsButton onClick={handleChangeEditorType}>
+					Change to {isRitchText ? "plain" : "ritch"} text editor
+				</EditorActionsButton>
+			</EditorActions>
+			{isRitchText ? (
+				<LexicalComposer initialConfig={editorConfig}>
+					<EditorContainer className="editor-container markdown-body">
+						<RichTextPlugin
+							contentEditable={<ContentEditable className="editor-input" />}
+							placeholder={<Placeholder />}
+							ErrorBoundary={LexicalErrorBoundary}
+						/>
+						<AutoFocusPlugin />
+						<ListPlugin />
+						<CheckListPlugin />
+						<LinkPlugin />
+						<HistoryPlugin />
+						<MarkdownShortcutPlugin transformers={ExtendedTransformer} />
+						<OnChangePlugin onChange={handleEditorChange} />
+						<CodeHighlightPlugin />
+					</EditorContainer>
+				</LexicalComposer>
+			) : (
+				<PlainTextEditor value={value} onChange={handlePlainEditorChange} />
+			)}
+		</>
 	);
 };
