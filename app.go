@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/adrg/xdg"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -19,10 +20,8 @@ type App struct {
 }
 
 // NewApp creates a new App application struct
-func NewApp(appConfig *AppConfig) *App {
-	return &App{
-		config: appConfig,
-	}
+func NewApp() *App {
+	return &App{}
 }
 
 // startup is called when the app starts. The context is saved
@@ -34,6 +33,22 @@ func (a *App) startup(ctx context.Context) {
 
 	runtime.LogDebug(a.ctx, "Startup called")
 	runtime.LogDebug(a.ctx, "Build Type: "+env.BuildType)
+
+	configPath, err := xdg.ConfigFile(fmt.Sprintf("njournal/config.%v.json", env.BuildType))
+	if err != nil {
+		fmt.Println("Error getting config path:", err)
+		return
+	}
+
+	appConfig, err := loadConfig(configPath)
+
+	if err != nil {
+		fmt.Println("Error loading config:", err)
+		return
+	}
+
+	a.config = appConfig
+
 	runtime.LogDebug(a.ctx, "Loading DB")
 
 	a.client, err = a.GetDB()
@@ -50,7 +65,7 @@ func (a *App) startup(ctx context.Context) {
 }
 
 func (a *App) GetDB() (*ent.Client, error) {
-	databaseSetup := fmt.Sprintf("file:%snjournal.db?mode=rwc&cache=shared&_fk=1", a.config.DataBasePath)
+	databaseSetup := fmt.Sprintf("file:%s/njournal.db?mode=rwc&cache=shared&_fk=1", a.config.DataBasePath)
 
 	runtime.LogDebug(a.ctx, "Database setup: "+databaseSetup)
 
