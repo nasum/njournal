@@ -1,8 +1,8 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-import { SideBar } from "./components/common/SideBar";
 import { ActionButton } from "./components/common/ActionButton";
+import { SideBar } from "./components/common/SideBar";
 
 import { useNotes } from "./hooks/useNotes";
 

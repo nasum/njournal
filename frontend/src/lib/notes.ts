@@ -1,10 +1,10 @@
-import { LogDebug } from "../../wailsjs/runtime";
 import {
 	CreateNote,
 	GetNote,
 	ListNotes,
 	UpdateNote,
 } from "../../wailsjs/go/main/App";
+import { LogDebug } from "../../wailsjs/runtime";
 
 export type Note = {
 	ID: string;

@@ -1,10 +1,10 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
-import App from "./App";
-import { Notes, List, Form } from "./components/pages/notes/Note";
 import "@acab/reset.css";
+import App from "./App";
+import { Form, List, Notes } from "./components/pages/notes/Note";
 
 const container = document.getElementById("root");
 

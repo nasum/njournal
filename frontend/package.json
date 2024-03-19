@@ -10,7 +10,9 @@
     "dev": "npm run format && vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "format": "biome format --write ./src"
+    "format": "biome format --write ./src",
+    "lint": "biome lint ./src",
+    "lint:fix": "biome check --apply ./src"
   },
   "dependencies": {
     "@acab/reset.css": "^0.8.0",

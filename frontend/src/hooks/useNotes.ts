@@ -1,10 +1,10 @@
 import { useState } from "react";
 import {
-	Note,
-	CallListNotes,
 	CallCreateNote,
-	CallUpdateNote,
 	CallGetNoteById,
+	CallListNotes,
+	CallUpdateNote,
+	Note,
 } from "../lib/notes";
 
 export type NoteHookType = {
@@ -46,7 +46,7 @@ export const useNotes = (): NoteHookType => {
 		return null;
 	};
 
-	const createNote = async (content: string = ""): Promise<Note | null> => {
+	const createNote = async (content = ""): Promise<Note | null> => {
 		try {
 			setLoading(true);
 			const note = await CallCreateNote({
