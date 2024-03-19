@@ -6,10 +6,6 @@ export function CreateNote(arg1) {
   return window['go']['main']['App']['CreateNote'](arg1);
 }
 
-export function GetDB() {
-  return window['go']['main']['App']['GetDB']();
-}
-
 export function GetNote(arg1) {
   return window['go']['main']['App']['GetNote'](arg1);
 }
