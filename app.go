@@ -51,7 +51,7 @@ func (a *App) startup(ctx context.Context) {
 
 	runtime.LogDebug(a.ctx, "Loading DB")
 
-	a.client, err = a.GetDB()
+	a.client, err = GetDB(a.ctx, a.config.DataBasePath, env.BuildType)
 
 	if err != nil {
 		runtime.LogErrorf(a.ctx, "Error loading DB: "+err.Error())
@@ -62,22 +62,6 @@ func (a *App) startup(ctx context.Context) {
 
 	runtime.LogDebug(a.ctx, "Startup complete")
 
-}
-
-func (a *App) GetDB() (*ent.Client, error) {
-	databaseSetup := fmt.Sprintf("file:%s/njournal.db?mode=rwc&cache=shared&_fk=1", a.config.DataBasePath)
-
-	runtime.LogDebug(a.ctx, "Database setup: "+databaseSetup)
-
-	client, err := ent.Open("sqlite3", databaseSetup)
-	if err != nil {
-		return nil, err
-	}
-
-	if err := client.Schema.Create(a.ctx); err != nil {
-		return nil, err
-	}
-	return client, nil
 }
 
 func (a *App) GetNote(id int) (*Note, error) {

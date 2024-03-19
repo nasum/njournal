@@ -26,12 +26,14 @@ export const SideBar = () => {
 			<ul>
 				<li>
 					<Link tabIndex={0} style={linkStyle} to="/">
-						<FiHome />Home
+						<FiHome />
+						Home
 					</Link>
 				</li>
 				<li>
 					<Link tabIndex={0} style={linkStyle} to="/notes">
-						<FiBook />Notes
+						<FiBook />
+						Notes
 					</Link>
 				</li>
 			</ul>
