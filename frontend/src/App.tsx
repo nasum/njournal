@@ -17,7 +17,7 @@ const MainContainer = styled.main`
   width: 100%;
   height: 100%;
   padding: 10px;
-  overflow-x]: hidden;
+  overflow-y: scroll;
 `;
 
 function App() {
