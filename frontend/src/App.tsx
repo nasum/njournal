@@ -5,9 +5,11 @@ import { ActionButton } from "./components/common/ActionButton";
 import { SideBar } from "./components/common/SideBar";
 
 import { useNotes } from "./hooks/useNotes";
+import { FooterBar } from "./components/common/FooterBar";
 
 const AppContainer = styled.div`
-  display: flex;
+	display: flex;
+	flex-direction: column;
   width: 100%;
   height: 100vh;
 `;
@@ -18,6 +20,12 @@ const MainContainer = styled.main`
   height: 100%;
   padding: 10px;
   overflow-y: scroll;
+`;
+
+const AppInner = styled.div`
+	display: flex;
+	width: 100%;
+	height: calc(100% - 25px);
 `;
 
 function App() {
@@ -38,11 +46,14 @@ function App() {
 
 	return (
 		<AppContainer id="App">
-			<SideBar />
-			<MainContainer>
-				<Outlet />
-			</MainContainer>
-			<ActionButton createNote={craeteNote} />
+			<AppInner>
+				<SideBar />
+				<MainContainer>
+					<Outlet />
+				</MainContainer>
+				<ActionButton createNote={craeteNote} />
+			</AppInner>
+			<FooterBar />
 		</AppContainer>
 	);
 }

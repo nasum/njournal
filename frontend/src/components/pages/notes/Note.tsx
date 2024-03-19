@@ -5,13 +5,6 @@ import styled from "styled-components";
 import { NoteHookType, useNotes } from "../../../hooks/useNotes";
 import { Editor } from "../../common/editor/Editor";
 
-const NoteContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-`;
-
 const NoteContext = createContext<NoteHookType | null>(null);
 
 export const Notes = () => {
@@ -22,13 +15,9 @@ export const Notes = () => {
 	}
 
 	return (
-		<NoteContainer id="Notes">
-			<div style={{ flex: 1 }} className="content">
-				<NoteContext.Provider value={note}>
-					<Outlet />
-				</NoteContext.Provider>
-			</div>
-		</NoteContainer>
+		<NoteContext.Provider value={note}>
+			<Outlet />
+		</NoteContext.Provider>
 	);
 };
 
