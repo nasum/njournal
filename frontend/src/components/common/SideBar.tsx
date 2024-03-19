@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { FiBook, FiHome } from "react-icons/fi";
 
 const SideBarHeader = styled.div`
   padding: 5px;
@@ -13,7 +14,7 @@ const SideBarContent = styled.div`
 `;
 
 const linkStyle = {
-	display: "block",
+	display: "flex",
 	padding: "5px",
 	cursor: "pointer",
 };
@@ -25,12 +26,12 @@ export const SideBar = () => {
 			<ul>
 				<li>
 					<Link tabIndex={0} style={linkStyle} to="/">
-						Home
+						<FiHome />Home
 					</Link>
 				</li>
 				<li>
 					<Link tabIndex={0} style={linkStyle} to="/notes">
-						Notes
+						<FiBook />Notes
 					</Link>
 				</li>
 			</ul>

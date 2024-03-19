@@ -1,9 +1,9 @@
-import { useEffect, useState, createContext, useContext } from "react";
-import { useParams, Link, Outlet } from "react-router-dom";
+import { createContext, useContext, useEffect, useState } from "react";
+import { Link, Outlet, useParams } from "react-router-dom";
 import styled from "styled-components";
 
+import { NoteHookType, useNotes } from "../../../hooks/useNotes";
 import { Editor } from "../../common/editor/Editor";
-import { useNotes, NoteHookType } from "../../../hooks/useNotes";
 
 const NoteContainer = styled.div`
   width: 100%;
