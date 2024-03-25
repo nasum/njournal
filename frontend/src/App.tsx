@@ -4,8 +4,8 @@ import styled from "styled-components";
 import { ActionButton } from "./components/common/ActionButton";
 import { SideBar } from "./components/common/SideBar";
 
-import { useNotes } from "./hooks/useNotes";
 import { FooterBar } from "./components/common/FooterBar";
+import { useNotes } from "./hooks/useNotes";
 
 const AppContainer = styled.div`
 	display: flex;

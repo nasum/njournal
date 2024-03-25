@@ -1,6 +1,6 @@
+import { FiBook, FiHome } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { FiBook, FiHome } from "react-icons/fi";
 
 const SideBarHeader = styled.div`
   padding: 5px;
