@@ -17,7 +17,7 @@ export function CallCreateNote(note: Note): Promise<Note> {
 	return CreateNote(note.Content);
 }
 
-export function CallGetNoteById(id: number): Promise<Note> {
+export function CallGetNoteById(id: string): Promise<Note> {
 	LogDebug(`CallGetNoteById: ${id}`);
 	if (id) {
 		return GetNote(id);
@@ -26,11 +26,12 @@ export function CallGetNoteById(id: number): Promise<Note> {
 	}
 }
 
-export function CallUpdateNote(id: number, content: string): Promise<Note> {
+export function CallUpdateNote(id: string, content: string): Promise<Note> {
 	return UpdateNote(id, content);
 }
 
 export async function CallListNotes(): Promise<Note[]> {
+	LogDebug("CallListNotes");
 	const notes = await ListNotes();
 	return notes.map((note: any) => {
 		return {

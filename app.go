@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/adrg/xdg"
+	"github.com/google/uuid"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -50,6 +51,7 @@ func (a *App) startup(ctx context.Context) {
 	a.config = appConfig
 
 	runtime.LogDebug(a.ctx, "Loading DB")
+	runtime.LogDebug(a.ctx, "Database Path: "+a.config.DataBasePath)
 
 	a.client, err = GetDB(a.ctx, a.config.DataBasePath, env.BuildType)
 
@@ -64,7 +66,7 @@ func (a *App) startup(ctx context.Context) {
 
 }
 
-func (a *App) GetNote(id int) (*Note, error) {
+func (a *App) GetNote(id uuid.UUID) (*Note, error) {
 	note, err := a.noteService.GetNoteByID(id)
 	return note, err
 }
@@ -81,7 +83,7 @@ func (a *App) CreateNote(content string) (*Note, error) {
 }
 
 // Update note
-func (a *App) UpdateNote(id int, content string) (*Note, error) {
+func (a *App) UpdateNote(id uuid.UUID, content string) (*Note, error) {
 	note, error := a.noteService.GetNoteByID(id)
 
 	if error != nil {

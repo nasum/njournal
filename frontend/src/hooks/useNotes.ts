@@ -12,8 +12,8 @@ export type NoteHookType = {
 	loading: boolean;
 	readNotes: () => void;
 	createNote: (content: string) => Promise<Note | null>;
-	updateNote: (id: number, content: string) => void;
-	getNote: (id: number) => Promise<Note | null>;
+	updateNote: (id: string, content: string) => void;
+	getNote: (id: string) => Promise<Note | null>;
 };
 
 export const useNotes = (): NoteHookType => {
@@ -32,7 +32,7 @@ export const useNotes = (): NoteHookType => {
 		}
 	};
 
-	const getNote = async (id: number) => {
+	const getNote = async (id: string) => {
 		try {
 			setLoading(true);
 			const note = await CallGetNoteById(id);
@@ -50,7 +50,7 @@ export const useNotes = (): NoteHookType => {
 		try {
 			setLoading(true);
 			const note = await CallCreateNote({
-				ID: "",
+				ID: crypto.randomUUID(),
 				Content: content,
 			});
 			await readNotes();
@@ -64,7 +64,7 @@ export const useNotes = (): NoteHookType => {
 		return null;
 	};
 
-	const updateNote = async (id: number, content: string) => {
+	const updateNote = async (id: string, content: string) => {
 		try {
 			setLoading(true);
 

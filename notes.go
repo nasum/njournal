@@ -6,11 +6,12 @@ import (
 	"context"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 type Note struct {
-	ID        int
+	ID        uuid.UUID
 	Content   string
 	UpdatedAt time.Time
 	CreatedAt time.Time
@@ -55,7 +56,7 @@ func (n *NotesService) Create(note Note) (*Note, error) {
 	}, nil
 }
 
-func (n *NotesService) GetNoteByID(id int) (*Note, error) {
+func (n *NotesService) GetNoteByID(id uuid.UUID) (*Note, error) {
 	runtime.LogDebugf(n.ctx, "Getting note by ID: %d", id)
 	note, err := n.client.Note.Get(n.ctx, id)
 	if err != nil {
