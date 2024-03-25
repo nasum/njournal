@@ -4,6 +4,7 @@ package note
 
 import (
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 const (
@@ -45,6 +46,8 @@ func ValidColumn(column string) bool {
 var (
 	// DefaultDeleted holds the default value on creation for the "deleted" field.
 	DefaultDeleted bool
+	// DefaultID holds the default value on creation for the "id" field.
+	DefaultID func() uuid.UUID
 )
 
 // OrderOption defines the ordering options for the Note queries.

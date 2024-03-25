@@ -40,7 +40,7 @@ func (nd *NoteDelete) ExecX(ctx context.Context) int {
 }
 
 func (nd *NoteDelete) sqlExec(ctx context.Context) (int, error) {
-	_spec := sqlgraph.NewDeleteSpec(note.Table, sqlgraph.NewFieldSpec(note.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewDeleteSpec(note.Table, sqlgraph.NewFieldSpec(note.FieldID, field.TypeUUID))
 	if ps := nd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

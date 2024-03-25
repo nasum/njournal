@@ -16,6 +16,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 // Client is the client that holds all ent builders.
@@ -258,7 +259,7 @@ func (c *NoteClient) UpdateOne(n *Note) *NoteUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *NoteClient) UpdateOneID(id int) *NoteUpdateOne {
+func (c *NoteClient) UpdateOneID(id uuid.UUID) *NoteUpdateOne {
 	mutation := newNoteMutation(c.config, OpUpdateOne, withNoteID(id))
 	return &NoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -275,7 +276,7 @@ func (c *NoteClient) DeleteOne(n *Note) *NoteDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *NoteClient) DeleteOneID(id int) *NoteDeleteOne {
+func (c *NoteClient) DeleteOneID(id uuid.UUID) *NoteDeleteOne {
 	builder := c.Delete().Where(note.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -292,12 +293,12 @@ func (c *NoteClient) Query() *NoteQuery {
 }
 
 // Get returns a Note entity by its id.
-func (c *NoteClient) Get(ctx context.Context, id int) (*Note, error) {
+func (c *NoteClient) Get(ctx context.Context, id uuid.UUID) (*Note, error) {
 	return c.Query().Where(note.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *NoteClient) GetX(ctx context.Context, id int) *Note {
+func (c *NoteClient) GetX(ctx context.Context, id uuid.UUID) *Note {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)

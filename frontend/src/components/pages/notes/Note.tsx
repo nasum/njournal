@@ -66,8 +66,8 @@ export const Form = () => {
 	const { id } = useParams();
 
 	useEffect(() => {
-		if (Number(id) != 0) {
-			note?.getNote(Number(id)).then((n) => {
+		if (id) {
+			note?.getNote(id).then((n) => {
 				if (n) {
 					setContent(n.Content);
 				}
@@ -76,7 +76,9 @@ export const Form = () => {
 	}, [id]);
 
 	const handleUpdateNote = (updatedContent: string) => {
-		note?.updateNote(Number(id), updatedContent);
+		if (id) {
+			note?.updateNote(id, updatedContent);
+		}
 	};
 
 	return content !== null ? (
