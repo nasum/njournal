@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"changeme/ent/image"
 	"changeme/ent/note"
 	"context"
 	"errors"
@@ -73,7 +74,8 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			note.Table: note.ValidColumn,
+			image.Table: image.ValidColumn,
+			note.Table:  note.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)
