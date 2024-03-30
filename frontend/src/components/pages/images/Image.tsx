@@ -1,16 +1,26 @@
-import { useState, DragEvent, ReactNode } from "react";
+import {
+	useState,
+	DragEvent,
+	ReactNode,
+	createContext,
+	useContext,
+} from "react";
+import { useImages, ImageHookType } from "../../../hooks/useImages";
 import { Outlet } from "react-router-dom";
-import styled from "styled-components";
 
-const ImageWrapper = styled.div`
-  height: 100%;
-`;
+const ImageContext = createContext<ImageHookType | null>(null);
 
 export const Images = () => {
+	const image = useImages();
+
+	if (!image) {
+		return null;
+	}
+
 	return (
-		<ImageWrapper>
+		<ImageContext.Provider value={image}>
 			<Outlet />
-		</ImageWrapper>
+		</ImageContext.Provider>
 	);
 };
 
@@ -59,6 +69,7 @@ const DropImageZone = ({ onDropFile, children }: Props) => {
 };
 
 export const ImageList = () => {
+	const image = useContext(ImageContext);
 	const [imageList, setImageList] = useState<string[]>([]);
 
 	const onDropFile = (files: FileList) => {
@@ -72,12 +83,14 @@ export const ImageList = () => {
 			if (file.type.substring(0, 5) !== "image") {
 				alert("画像ファイルでないものはアップロードできません！");
 			} else {
-				const fileReader = new FileReader();
-				fileReader.onload = () => {
-					const imageSrc: string = fileReader.result as string;
-					setImageList([...imageList, imageSrc]);
+				const reader = new FileReader();
+				reader.onload = (e) => {
+					const data = e.target?.result as ArrayBuffer;
+					console.log(data);
+					image?.createImage(file.name, Array.from(new Uint8Array(data)));
 				};
-				fileReader.readAsDataURL(file);
+
+				reader.readAsArrayBuffer(file);
 			}
 		}
 	};
