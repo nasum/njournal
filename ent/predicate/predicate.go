@@ -6,5 +6,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
+// Image is the predicate function for image builders.
+type Image func(*sql.Selector)
+
 // Note is the predicate function for note builders.
 type Note func(*sql.Selector)

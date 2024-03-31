@@ -4,6 +4,8 @@ import (
 	"changeme/ent"
 	"context"
 	"fmt"
+	"os"
+	"path/filepath"
 
 	"github.com/adrg/xdg"
 	"github.com/google/uuid"
@@ -14,10 +16,11 @@ import (
 
 // App struct
 type App struct {
-	ctx         context.Context
-	client      *ent.Client
-	noteService *NotesService
-	config      *AppConfig
+	ctx          context.Context
+	client       *ent.Client
+	noteService  *NotesService
+	imageService *imageService
+	config       *AppConfig
 }
 
 // NewApp creates a new App application struct
@@ -61,6 +64,7 @@ func (a *App) startup(ctx context.Context) {
 	}
 
 	a.noteService = &NotesService{client: a.client, ctx: a.ctx}
+	a.imageService = &imageService{client: a.client, ctx: a.ctx}
 
 	runtime.LogDebug(a.ctx, "Startup complete")
 
@@ -110,4 +114,32 @@ func (a *App) ListNotes() ([]Note, error) {
 	}
 
 	return notes, nil
+}
+
+func (a *App) CreateImageFromLocal(fileName string, data []byte) error {
+	path := filepath.Join(a.config.ImageBasePath, a.config.ImagePath, fileName)
+	err := os.WriteFile(path, data, 0644)
+
+	if err != nil {
+		return err
+	}
+
+	runtime.LogDebug(a.ctx, "Image saved to: "+path)
+	err = a.imageService.Create(fmt.Sprintf("%v/%v", a.config.ImagePath, fileName))
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (a *App) GetImageList() ([]Image, error) {
+	images, err := a.imageService.List(a.config.ImageBasePath)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return images, nil
 }

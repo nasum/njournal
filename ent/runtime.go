@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"changeme/ent/image"
 	"changeme/ent/note"
 	"changeme/ent/schema"
 
@@ -13,6 +14,16 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	imageFields := schema.Image{}.Fields()
+	_ = imageFields
+	// imageDescDeleted is the schema descriptor for deleted field.
+	imageDescDeleted := imageFields[2].Descriptor()
+	// image.DefaultDeleted holds the default value on creation for the deleted field.
+	image.DefaultDeleted = imageDescDeleted.Default.(bool)
+	// imageDescID is the schema descriptor for id field.
+	imageDescID := imageFields[0].Descriptor()
+	// image.DefaultID holds the default value on creation for the id field.
+	image.DefaultID = imageDescID.Default.(func() uuid.UUID)
 	noteFields := schema.Note{}.Fields()
 	_ = noteFields
 	// noteDescDeleted is the schema descriptor for deleted field.

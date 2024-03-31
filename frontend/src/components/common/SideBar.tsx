@@ -1,4 +1,4 @@
-import { FiBook, FiHome } from "react-icons/fi";
+import { FiBook, FiHome, FiImage } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
@@ -34,6 +34,12 @@ export const SideBar = () => {
 					<Link tabIndex={0} style={linkStyle} to="/notes">
 						<FiBook />
 						Notes
+					</Link>
+				</li>
+				<li>
+					<Link tabIndex={0} style={linkStyle} to="/images">
+						<FiImage />
+						Images
 					</Link>
 				</li>
 			</ul>
