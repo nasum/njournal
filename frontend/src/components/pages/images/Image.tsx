@@ -137,7 +137,7 @@ export const ImageList = () => {
 			<ImageListContainer>
 				{image?.images.map((image, index) => {
 					return (
-						<ImageWrapper>
+						<ImageWrapper tabIndex={0}>
 							<img
 								key={image.ID}
 								src={image.Data}
@@ -150,7 +150,6 @@ export const ImageList = () => {
 									openImageDialog(image.Data);
 								}}
 								aria-label={`image-${index}`}
-								tabIndex={0}
 							/>
 						</ImageWrapper>
 					);
