@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { CallCreateImages, Image } from "../lib/images";
-import { LogDebug } from "../../wailsjs/runtime/runtime";
+import { CallCreateImages, CallGetImages, Image } from "../lib/images";
 
 export type ImageHookType = {
 	images: Image[];
 	loading: boolean;
 	createImage: (fileName: string, paths: number[]) => Promise<void>;
+	getImages: () => Promise<void>;
 };
 
 export const useImages = (): ImageHookType => {
@@ -18,8 +18,8 @@ export const useImages = (): ImageHookType => {
 	): Promise<void> => {
 		try {
 			setLoading(true);
-			console.log(data);
 			await CallCreateImages(fileName, data);
+			await getImages();
 		} catch (e) {
 			console.error(e);
 		} finally {
@@ -27,9 +27,19 @@ export const useImages = (): ImageHookType => {
 		}
 	};
 
+	const getImages = async (): Promise<void> => {
+		try {
+			const images = await CallGetImages();
+			setImages(images);
+		} catch (e) {
+			console.error(e);
+		}
+	};
+
 	return {
 		images,
 		loading,
 		createImage,
+		getImages,
 	};
 };

@@ -1,5 +1,6 @@
 import {
 	useState,
+	useEffect,
 	DragEvent,
 	ReactNode,
 	createContext,
@@ -7,6 +8,7 @@ import {
 } from "react";
 import { useImages, ImageHookType } from "../../../hooks/useImages";
 import { Outlet } from "react-router-dom";
+import styled from "styled-components";
 
 const ImageContext = createContext<ImageHookType | null>(null);
 
@@ -58,7 +60,7 @@ const DropImageZone = ({ onDropFile, children }: Props) => {
 			onDrop={onDrop}
 			style={{
 				height: "100%",
-				backgroundColor: isDragActive ? "black" : "white",
+				backgroundColor: isDragActive ? "black" : "inherit",
 				opacity: isDragActive ? 0.5 : 1,
 			}}
 			className={"drop-target"}
@@ -68,9 +70,23 @@ const DropImageZone = ({ onDropFile, children }: Props) => {
 	);
 };
 
+const ImageListContainer = styled.div`
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	justify-content: space-between;
+`;
+
+const ImageWrapper = styled.div`
+	flex-direction: column;
+`;
+
 export const ImageList = () => {
 	const image = useContext(ImageContext);
-	const [imageList, setImageList] = useState<string[]>([]);
+
+	useEffect(() => {
+		image?.getImages();
+	}, []);
 
 	const onDropFile = (files: FileList) => {
 		for (let i = 0; i < files.length; i++) {
@@ -80,9 +96,7 @@ export const ImageList = () => {
 				continue;
 			}
 
-			if (file.type.substring(0, 5) !== "image") {
-				alert("画像ファイルでないものはアップロードできません！");
-			} else {
+			if (file.type.substring(0, 5) === "image") {
 				const reader = new FileReader();
 				reader.onload = (e) => {
 					const data = e.target?.result as ArrayBuffer;
@@ -97,15 +111,21 @@ export const ImageList = () => {
 
 	return (
 		<DropImageZone onDropFile={onDropFile}>
-			<ul>
-				{imageList.map((image, index) => {
+			<ImageListContainer>
+				{image?.images.map((image, index) => {
+					console.log("View Image: ", image);
 					return (
-						<li>
-							<img key={index} src={image} alt={`image-${index}`} />
-						</li>
+						<ImageWrapper>
+							<img
+								key={image.ID}
+								src={image.Data}
+								alt={`image-${index}`}
+								style={{ height: "200px" }}
+							/>
+						</ImageWrapper>
 					);
 				})}
-			</ul>
+			</ImageListContainer>
 		</DropImageZone>
 	);
 };

@@ -133,3 +133,13 @@ func (a *App) CreateImageFromLocal(fileName string, data []byte) error {
 
 	return nil
 }
+
+func (a *App) GetImageList() ([]Image, error) {
+	images, err := a.imageService.List(a.config.ImageBasePath)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return images, nil
+}
