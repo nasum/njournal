@@ -1,10 +1,11 @@
 import {
+	useContext,
 	useState,
 	useEffect,
+	useRef,
 	DragEvent,
 	ReactNode,
 	createContext,
-	useContext,
 } from "react";
 import { useImages, ImageHookType } from "../../../hooks/useImages";
 import { Outlet } from "react-router-dom";
@@ -81,8 +82,21 @@ const ImageWrapper = styled.div`
 	flex-direction: column;
 `;
 
+const ImageDialog = styled.dialog`
+	border: none;
+	margin: auto;
+`;
+
+const DialogImage = styled.img`
+	display: block;
+	margin: 0 auto;
+`;
+
 export const ImageList = () => {
+	const dialogRef = useRef<HTMLDialogElement>(null);
 	const image = useContext(ImageContext);
+
+	const [selectedImageData, setSelectedImageData] = useState<string>("");
 
 	useEffect(() => {
 		image?.getImages();
@@ -109,23 +123,34 @@ export const ImageList = () => {
 		}
 	};
 
+	const clickImage = (imageData: string) => {
+		setSelectedImageData(imageData);
+		dialogRef.current?.showModal();
+	};
+
+	const clickDialog = () => {
+		dialogRef.current?.close();
+	};
+
 	return (
 		<DropImageZone onDropFile={onDropFile}>
 			<ImageListContainer>
 				{image?.images.map((image, index) => {
-					console.log("View Image: ", image);
 					return (
 						<ImageWrapper>
 							<img
 								key={image.ID}
 								src={image.Data}
-								alt={`image-${index}`}
-								style={{ height: "200px" }}
+								style={{ height: "200px", cursor: "pointer" }}
+								onClick={() => clickImage(image.Data)}
 							/>
 						</ImageWrapper>
 					);
 				})}
 			</ImageListContainer>
+			<ImageDialog ref={dialogRef} onClick={clickDialog}>
+				<DialogImage src={selectedImageData} />
+			</ImageDialog>
 		</DropImageZone>
 	);
 };
