@@ -1,7 +1,7 @@
 import {
 	useContext,
-	useState,
 	useEffect,
+	useState,
 	useRef,
 	DragEvent,
 	ReactNode,
@@ -19,6 +19,10 @@ export const Images = () => {
 	if (!image) {
 		return null;
 	}
+
+	useEffect(() => {
+		image.getImages();
+	}, []);
 
 	return (
 		<ImageContext.Provider value={image}>
@@ -98,10 +102,6 @@ export const ImageList = () => {
 
 	const [selectedImageData, setSelectedImageData] = useState<string>("");
 
-	useEffect(() => {
-		image?.getImages();
-	}, []);
-
 	const onDropFile = (files: FileList) => {
 		for (let i = 0; i < files.length; i++) {
 			const file = files.item(i);
@@ -114,7 +114,6 @@ export const ImageList = () => {
 				const reader = new FileReader();
 				reader.onload = (e) => {
 					const data = e.target?.result as ArrayBuffer;
-					console.log(data);
 					image?.createImage(file.name, Array.from(new Uint8Array(data)));
 				};
 
@@ -123,9 +122,10 @@ export const ImageList = () => {
 		}
 	};
 
-	const clickImage = (imageData: string) => {
+	const openImageDialog = (imageData: string) => {
 		setSelectedImageData(imageData);
 		dialogRef.current?.showModal();
+		dialogRef.current?.focus();
 	};
 
 	const clickDialog = () => {
@@ -142,13 +142,29 @@ export const ImageList = () => {
 								key={image.ID}
 								src={image.Data}
 								style={{ height: "200px", cursor: "pointer" }}
-								onClick={() => clickImage(image.Data)}
+								onClick={() => openImageDialog(image.Data)}
+								onKeyDown={(e) => {
+									if (e.key !== "Enter") {
+										return;
+									}
+									openImageDialog(image.Data);
+								}}
+								aria-label={`image-${index}`}
+								tabIndex={0}
 							/>
 						</ImageWrapper>
 					);
 				})}
 			</ImageListContainer>
-			<ImageDialog ref={dialogRef} onClick={clickDialog}>
+			<ImageDialog
+				ref={dialogRef}
+				onClick={clickDialog}
+				onKeyDown={(e) => {
+					if (e.key === "Enter") {
+						clickDialog();
+					}
+				}}
+			>
 				<DialogImage src={selectedImageData} />
 			</ImageDialog>
 		</DropImageZone>
