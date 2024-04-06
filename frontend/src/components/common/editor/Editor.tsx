@@ -17,7 +17,6 @@ import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
-import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
@@ -26,7 +25,9 @@ import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin
 import { HeadingNode, QuoteNode } from "@lexical/rich-text";
 import { TableCellNode, TableNode, TableRowNode } from "@lexical/table";
 import { EditorState } from "lexical";
+
 import CodeHighlightPlugin from "./plugins/CodeHighlight";
+import LinkPlugin from "./plugins/LinkPlugin";
 import { Theme } from "./theme/Theme";
 
 import "github-markdown-css";
@@ -47,6 +48,18 @@ const EditorContainer = styled.div`
   :where(ol) {
     list-style: decimal;
   }
+
+	li[role="checkbox"] {
+		cursor: pointer;
+		span {
+			cursor: auto;
+		}
+	}
+
+	a {
+		text-decoration: none;
+		cursor: pointer;
+	}
 `;
 
 const EditorActions = styled.div`
