@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+
 import { $isLinkNode } from "@lexical/link";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import type { LexicalEditor } from "lexical";
 import { $getNearestNodeFromDOMNode } from "lexical";
-import { useEffect } from "react";
+
 import { BrowserOpenURL } from "../../../../../wailsjs/runtime";
 
 export default function LinkPlugin() {

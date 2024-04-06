@@ -4,8 +4,8 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import "@acab/reset.css";
 import App from "./App";
-import { Form, List, Notes } from "./components/pages/notes/Note";
 import { ImageList, Images } from "./components/pages/images/Image";
+import { Form, List, Notes } from "./components/pages/notes/Note";
 
 const container = document.getElementById("root");
 
