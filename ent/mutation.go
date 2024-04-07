@@ -534,6 +534,7 @@ type NoteMutation struct {
 	created_at    *time.Time
 	updated_at    *time.Time
 	deleted       *bool
+	title         *string
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*Note, error)
@@ -788,6 +789,42 @@ func (m *NoteMutation) ResetDeleted() {
 	m.deleted = nil
 }
 
+// SetTitle sets the "title" field.
+func (m *NoteMutation) SetTitle(s string) {
+	m.title = &s
+}
+
+// Title returns the value of the "title" field in the mutation.
+func (m *NoteMutation) Title() (r string, exists bool) {
+	v := m.title
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTitle returns the old "title" field's value of the Note entity.
+// If the Note object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *NoteMutation) OldTitle(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTitle is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTitle requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTitle: %w", err)
+	}
+	return oldValue.Title, nil
+}
+
+// ResetTitle resets all changes to the "title" field.
+func (m *NoteMutation) ResetTitle() {
+	m.title = nil
+}
+
 // Where appends a list predicates to the NoteMutation builder.
 func (m *NoteMutation) Where(ps ...predicate.Note) {
 	m.predicates = append(m.predicates, ps...)
@@ -822,7 +859,7 @@ func (m *NoteMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *NoteMutation) Fields() []string {
-	fields := make([]string, 0, 4)
+	fields := make([]string, 0, 5)
 	if m.content != nil {
 		fields = append(fields, note.FieldContent)
 	}
@@ -834,6 +871,9 @@ func (m *NoteMutation) Fields() []string {
 	}
 	if m.deleted != nil {
 		fields = append(fields, note.FieldDeleted)
+	}
+	if m.title != nil {
+		fields = append(fields, note.FieldTitle)
 	}
 	return fields
 }
@@ -851,6 +891,8 @@ func (m *NoteMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case note.FieldDeleted:
 		return m.Deleted()
+	case note.FieldTitle:
+		return m.Title()
 	}
 	return nil, false
 }
@@ -868,6 +910,8 @@ func (m *NoteMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldUpdatedAt(ctx)
 	case note.FieldDeleted:
 		return m.OldDeleted(ctx)
+	case note.FieldTitle:
+		return m.OldTitle(ctx)
 	}
 	return nil, fmt.Errorf("unknown Note field %s", name)
 }
@@ -904,6 +948,13 @@ func (m *NoteMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDeleted(v)
+		return nil
+	case note.FieldTitle:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTitle(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Note field %s", name)
@@ -965,6 +1016,9 @@ func (m *NoteMutation) ResetField(name string) error {
 		return nil
 	case note.FieldDeleted:
 		m.ResetDeleted()
+		return nil
+	case note.FieldTitle:
+		m.ResetTitle()
 		return nil
 	}
 	return fmt.Errorf("unknown Note field %s", name)

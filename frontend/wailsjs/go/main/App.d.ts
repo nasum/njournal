@@ -7,10 +7,14 @@ export function CreateImageFromLocal(arg1:string,arg2:Array<number>):Promise<voi
 
 export function CreateNote(arg1:string):Promise<main.Note>;
 
+export function DeleteNote(arg1:uuid.UUID):Promise<void>;
+
 export function GetImageList():Promise<Array<main.Image>>;
 
 export function GetNote(arg1:uuid.UUID):Promise<main.Note>;
 
 export function ListNotes():Promise<Array<main.Note>>;
+
+export function SearchByTitle(arg1:string):Promise<Array<main.Note>>;
 
 export function UpdateNote(arg1:uuid.UUID,arg2:string):Promise<main.Note>;

@@ -20,7 +20,6 @@ export async function CallGetImages(): Promise<Image[]> {
 	const imageList = await GetImageList();
 
 	return imageList.map((image) => {
-		console.log(image);
 		return {
 			ID: image.ID,
 			Data: image.Data,

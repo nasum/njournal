@@ -8,6 +8,7 @@ import { LogDebug } from "../../wailsjs/runtime";
 
 export type Note = {
 	ID: string;
+	Title?: string;
 	Content: string;
 	UpdatedAt?: string;
 	CreatedAt?: string;
@@ -36,6 +37,7 @@ export async function CallListNotes(): Promise<Note[]> {
 	return notes.map((note: any) => {
 		return {
 			ID: note.ID,
+			Title: note.Title,
 			Content: note.Content,
 			UpdatedAt: note.UpdatedAt,
 			CreatedAt: note.CreatedAt,

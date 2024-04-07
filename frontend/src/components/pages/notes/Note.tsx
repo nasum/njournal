@@ -5,6 +5,18 @@ import styled from "styled-components";
 import { NoteHookType, useNotes } from "../../../hooks/useNotes";
 import { Editor } from "../../common/editor/Editor";
 
+const ListItem = styled.li`
+display: flex;
+justify-content: space-between;
+`;
+
+const Title = styled.div`
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+width: 500px;
+`;
+
 const NoteContext = createContext<NoteHookType | null>(null);
 
 export const Notes = () => {
@@ -24,18 +36,6 @@ export const Notes = () => {
 export const List = () => {
 	const note = useContext(NoteContext);
 
-	const ListItem = styled.li`
-    display: flex;
-    justify-content: space-between;
-  `;
-
-	const Title = styled.div`
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 500px;
-  `;
-
 	const DateArea = ({ date }: { date: string }) => {
 		const datetime = new Date(date).toLocaleString();
 		return <span>{datetime}</span>;
@@ -50,7 +50,7 @@ export const List = () => {
 			{note?.notes.map((note) => (
 				<ListItem key={note.ID}>
 					<Link to={`${note.ID}`}>
-						<Title>{note.Content || "no contents"}</Title>
+						<Title>{note.Title || "no title"}</Title>
 					</Link>
 					<DateArea date={note.UpdatedAt || ""} />
 				</ListItem>

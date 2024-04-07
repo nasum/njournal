@@ -30,6 +30,10 @@ func init() {
 	noteDescDeleted := noteFields[4].Descriptor()
 	// note.DefaultDeleted holds the default value on creation for the deleted field.
 	note.DefaultDeleted = noteDescDeleted.Default.(bool)
+	// noteDescTitle is the schema descriptor for title field.
+	noteDescTitle := noteFields[5].Descriptor()
+	// note.DefaultTitle holds the default value on creation for the title field.
+	note.DefaultTitle = noteDescTitle.Default.(string)
 	// noteDescID is the schema descriptor for id field.
 	noteDescID := noteFields[0].Descriptor()
 	// note.DefaultID holds the default value on creation for the id field.

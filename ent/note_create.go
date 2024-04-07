@@ -53,6 +53,20 @@ func (nc *NoteCreate) SetNillableDeleted(b *bool) *NoteCreate {
 	return nc
 }
 
+// SetTitle sets the "title" field.
+func (nc *NoteCreate) SetTitle(s string) *NoteCreate {
+	nc.mutation.SetTitle(s)
+	return nc
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (nc *NoteCreate) SetNillableTitle(s *string) *NoteCreate {
+	if s != nil {
+		nc.SetTitle(*s)
+	}
+	return nc
+}
+
 // SetID sets the "id" field.
 func (nc *NoteCreate) SetID(u uuid.UUID) *NoteCreate {
 	nc.mutation.SetID(u)
@@ -106,6 +120,10 @@ func (nc *NoteCreate) defaults() {
 		v := note.DefaultDeleted
 		nc.mutation.SetDeleted(v)
 	}
+	if _, ok := nc.mutation.Title(); !ok {
+		v := note.DefaultTitle
+		nc.mutation.SetTitle(v)
+	}
 	if _, ok := nc.mutation.ID(); !ok {
 		v := note.DefaultID()
 		nc.mutation.SetID(v)
@@ -125,6 +143,9 @@ func (nc *NoteCreate) check() error {
 	}
 	if _, ok := nc.mutation.Deleted(); !ok {
 		return &ValidationError{Name: "deleted", err: errors.New(`ent: missing required field "Note.deleted"`)}
+	}
+	if _, ok := nc.mutation.Title(); !ok {
+		return &ValidationError{Name: "title", err: errors.New(`ent: missing required field "Note.title"`)}
 	}
 	return nil
 }
@@ -176,6 +197,10 @@ func (nc *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 	if value, ok := nc.mutation.Deleted(); ok {
 		_spec.SetField(note.FieldDeleted, field.TypeBool, value)
 		_node.Deleted = value
+	}
+	if value, ok := nc.mutation.Title(); ok {
+		_spec.SetField(note.FieldTitle, field.TypeString, value)
+		_node.Title = value
 	}
 	return _node, _spec
 }

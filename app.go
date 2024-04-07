@@ -116,6 +116,20 @@ func (a *App) ListNotes() ([]Note, error) {
 	return notes, nil
 }
 
+func (a *App) SearchByTitle(title string) ([]Note, error) {
+	notes, err := a.noteService.SearchByTitle(title)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return notes, nil
+}
+
+func (a *App) DeleteNote(id uuid.UUID) error {
+	return a.noteService.Delete(id)
+}
+
 func (a *App) CreateImageFromLocal(fileName string, data []byte) error {
 	path := filepath.Join(a.config.ImageBasePath, a.config.ImagePath, fileName)
 	err := os.WriteFile(path, data, 0644)

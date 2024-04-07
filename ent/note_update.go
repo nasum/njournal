@@ -84,6 +84,20 @@ func (nu *NoteUpdate) SetNillableDeleted(b *bool) *NoteUpdate {
 	return nu
 }
 
+// SetTitle sets the "title" field.
+func (nu *NoteUpdate) SetTitle(s string) *NoteUpdate {
+	nu.mutation.SetTitle(s)
+	return nu
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (nu *NoteUpdate) SetNillableTitle(s *string) *NoteUpdate {
+	if s != nil {
+		nu.SetTitle(*s)
+	}
+	return nu
+}
+
 // Mutation returns the NoteMutation object of the builder.
 func (nu *NoteUpdate) Mutation() *NoteMutation {
 	return nu.mutation
@@ -136,6 +150,9 @@ func (nu *NoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := nu.mutation.Deleted(); ok {
 		_spec.SetField(note.FieldDeleted, field.TypeBool, value)
+	}
+	if value, ok := nu.mutation.Title(); ok {
+		_spec.SetField(note.FieldTitle, field.TypeString, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, nu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -209,6 +226,20 @@ func (nuo *NoteUpdateOne) SetDeleted(b bool) *NoteUpdateOne {
 func (nuo *NoteUpdateOne) SetNillableDeleted(b *bool) *NoteUpdateOne {
 	if b != nil {
 		nuo.SetDeleted(*b)
+	}
+	return nuo
+}
+
+// SetTitle sets the "title" field.
+func (nuo *NoteUpdateOne) SetTitle(s string) *NoteUpdateOne {
+	nuo.mutation.SetTitle(s)
+	return nuo
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (nuo *NoteUpdateOne) SetNillableTitle(s *string) *NoteUpdateOne {
+	if s != nil {
+		nuo.SetTitle(*s)
 	}
 	return nuo
 }
@@ -295,6 +326,9 @@ func (nuo *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) 
 	}
 	if value, ok := nuo.mutation.Deleted(); ok {
 		_spec.SetField(note.FieldDeleted, field.TypeBool, value)
+	}
+	if value, ok := nuo.mutation.Title(); ok {
+		_spec.SetField(note.FieldTitle, field.TypeString, value)
 	}
 	_node = &Note{config: nuo.config}
 	_spec.Assign = _node.assignValues

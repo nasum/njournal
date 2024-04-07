@@ -4,6 +4,7 @@ import (
 	"changeme/ent"
 	"changeme/ent/note"
 	"context"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -12,6 +13,7 @@ import (
 
 type Note struct {
 	ID        uuid.UUID
+	Title     string
 	Content   string
 	UpdatedAt time.Time
 	CreatedAt time.Time
@@ -20,6 +22,7 @@ type Note struct {
 func createNote(rowNote *ent.Note) Note {
 	return Note{
 		ID:        rowNote.ID,
+		Title:     rowNote.Title,
 		Content:   rowNote.Content,
 		UpdatedAt: rowNote.UpdatedAt,
 		CreatedAt: rowNote.CreatedAt,
@@ -31,6 +34,7 @@ func createNoteList(rowNotes []*ent.Note) []Note {
 	for _, rowNote := range rowNotes {
 		notes = append(notes, Note{
 			ID:        rowNote.ID,
+			Title:     rowNote.Title,
 			Content:   rowNote.Content,
 			UpdatedAt: rowNote.UpdatedAt,
 			CreatedAt: rowNote.CreatedAt,
@@ -46,10 +50,19 @@ type NotesService struct {
 
 func (n *NotesService) Create(note Note) (*Note, error) {
 	today := time.Now()
-	savedNote, err := n.client.Note.Create().SetContent(note.Content).SetUpdatedAt(today).SetCreatedAt(today).Save(n.ctx)
+	title := CreateTitle(note.Content)
+
+	savedNote, err := n.client.Note.Create().
+		SetTitle(title).
+		SetContent(note.Content).
+		SetUpdatedAt(today).
+		SetCreatedAt(today).
+		Save(n.ctx)
+
 	if err != nil {
 		return nil, err
 	}
+
 	return &Note{
 		ID:      savedNote.ID,
 		Content: savedNote.Content,
@@ -70,10 +83,14 @@ func (n *NotesService) GetNoteByID(id uuid.UUID) (*Note, error) {
 
 func (n *NotesService) Update(noteToUpdate Note) (*Note, error) {
 	today := time.Now()
+	title := CreateTitle(noteToUpdate.Content)
+
 	updatedNote, err := n.client.Note.UpdateOneID(noteToUpdate.ID).
+		SetTitle(title).
 		SetContent(noteToUpdate.Content).
 		SetUpdatedAt(today).
 		Save(n.ctx)
+
 	if err != nil {
 		return nil, err
 	}
@@ -83,12 +100,29 @@ func (n *NotesService) Update(noteToUpdate Note) (*Note, error) {
 	return &noteToReturn, nil
 }
 
-func (n *NotesService) Delete() string {
-	return "Hello World!"
+func (n *NotesService) Delete(id uuid.UUID) error {
+	today := time.Now()
+
+	_, err := n.client.Note.UpdateOneID(id).
+		SetUpdatedAt(today).
+		SetDeleted(true).
+		Save(n.ctx)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func (n *NotesService) Search() string {
-	return "Hello World!"
+func (n *NotesService) SearchByTitle(title string) ([]Note, error) {
+	notes, err := n.client.Note.Query().Where(note.TitleContains(title)).All(n.ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return createNoteList(notes), nil
 }
 
 func (n *NotesService) List() ([]Note, error) {
@@ -101,4 +135,10 @@ func (n *NotesService) List() ([]Note, error) {
 	notesToReturn := createNoteList(notes)
 
 	return notesToReturn, nil
+}
+
+func CreateTitle(content string) string {
+	head := strings.Split(content, "\n")[0]
+	head = strings.ReplaceAll(head, "#", "")
+	return head
 }

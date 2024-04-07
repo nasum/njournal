@@ -25,7 +25,9 @@ type Note struct {
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// Deleted holds the value of the "deleted" field.
-	Deleted      bool `json:"deleted,omitempty"`
+	Deleted bool `json:"deleted,omitempty"`
+	// Title holds the value of the "title" field.
+	Title        string `json:"title,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -36,7 +38,7 @@ func (*Note) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case note.FieldDeleted:
 			values[i] = new(sql.NullBool)
-		case note.FieldContent:
+		case note.FieldContent, note.FieldTitle:
 			values[i] = new(sql.NullString)
 		case note.FieldCreatedAt, note.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -87,6 +89,12 @@ func (n *Note) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				n.Deleted = value.Bool
 			}
+		case note.FieldTitle:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field title", values[i])
+			} else if value.Valid {
+				n.Title = value.String
+			}
 		default:
 			n.selectValues.Set(columns[i], values[i])
 		}
@@ -134,6 +142,9 @@ func (n *Note) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("deleted=")
 	builder.WriteString(fmt.Sprintf("%v", n.Deleted))
+	builder.WriteString(", ")
+	builder.WriteString("title=")
+	builder.WriteString(n.Title)
 	builder.WriteByte(')')
 	return builder.String()
 }
