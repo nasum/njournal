@@ -6,6 +6,7 @@ import {
 	CallUpdateNote,
 	Note,
 } from "../lib/notes";
+import { GetNotesOrder } from "../lib/localStorage";
 
 export type NoteHookType = {
 	notes: Note[];
@@ -23,7 +24,11 @@ export const useNotes = (): NoteHookType => {
 	const readNotes = async () => {
 		try {
 			setLoading(true);
-			const notes = await CallListNotes();
+			const order = GetNotesOrder();
+			const notes = await CallListNotes({
+				OrderBy: order.order_by,
+				Order: order.order,
+			});
 			setNotes(notes);
 		} catch (e) {
 			console.error(e);

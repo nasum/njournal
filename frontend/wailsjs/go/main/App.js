@@ -18,8 +18,8 @@ export function GetNote(arg1) {
   return window['go']['main']['App']['GetNote'](arg1);
 }
 
-export function ListNotes() {
-  return window['go']['main']['App']['ListNotes']();
+export function ListNotes(arg1) {
+  return window['go']['main']['App']['ListNotes'](arg1);
 }
 
 export function UpdateNote(arg1, arg2) {

@@ -110,9 +110,11 @@ func (n *NotesService) Update(noteToUpdate Note) (*Note, error) {
 	return &noteToReturn, nil
 }
 
-func (n *NotesService) List() ([]Note, error) {
+func (n *NotesService) List(option ListNotesOptions) ([]Note, error) {
+	order := option.OrderBy + " " + option.Order
+
 	var notes []*models.Note
-	err := n.db.Find(&notes).Error
+	err := n.db.Order(order).Find(&notes).Error
 
 	if err != nil {
 		return nil, err

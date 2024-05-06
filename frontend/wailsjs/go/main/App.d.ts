@@ -11,6 +11,6 @@ export function GetImageList():Promise<Array<main.Image>>;
 
 export function GetNote(arg1:uuid.UUID):Promise<main.Note>;
 
-export function ListNotes():Promise<Array<main.Note>>;
+export function ListNotes(arg1:main.ListNotesOptions):Promise<Array<main.Note>>;
 
 export function UpdateNote(arg1:uuid.UUID,arg2:string):Promise<main.Note>;

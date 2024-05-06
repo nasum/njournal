@@ -31,9 +31,14 @@ export function CallUpdateNote(id: string, content: string): Promise<Note> {
 	return UpdateNote(id, content);
 }
 
-export async function CallListNotes(): Promise<Note[]> {
+type ListNotesOptions = {
+	OrderBy?: "updated_at" | "created_at";
+	Order?: "asc" | "desc";
+};
+
+export async function CallListNotes(option: ListNotesOptions): Promise<Note[]> {
 	LogDebug("CallListNotes");
-	const notes = await ListNotes();
+	const notes = await ListNotes(option);
 	return notes.map((note: any) => {
 		return {
 			ID: note.ID,
