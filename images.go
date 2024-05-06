@@ -1,15 +1,16 @@
 package main
 
 import (
-	"changeme/ent"
 	"context"
 	"encoding/base64"
 	"fmt"
 	"net/http"
+	"njournal/models"
 	"os"
 	"time"
 
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type Image struct {
@@ -20,13 +21,19 @@ type Image struct {
 }
 
 type imageService struct {
-	client *ent.Client
-	ctx    context.Context
+	db  *gorm.DB
+	ctx context.Context
 }
 
 func (i *imageService) Create(imagePath string) error {
 	today := time.Now()
-	_, err := i.client.Image.Create().SetPath(imagePath).SetUpdatedAt(today).SetCreatedAt(today).Save(i.ctx)
+	image := models.Image{
+		ID:        uuid.New(),
+		Path:      imagePath,
+		UpdatedAt: today,
+		CreatedAt: today,
+	}
+	err := i.db.Create(&image).Error
 
 	if err != nil {
 		return err
@@ -36,7 +43,8 @@ func (i *imageService) Create(imagePath string) error {
 }
 
 func (i *imageService) List(basePath string) ([]Image, error) {
-	ims, err := i.client.Image.Query().All(i.ctx)
+	var ims []*models.Image
+	err := i.db.Find(&ims).Error
 
 	if err != nil {
 		return nil, err
