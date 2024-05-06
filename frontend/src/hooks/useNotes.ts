@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { GetNotesOrder } from "../lib/localStorage";
 import {
 	CallCreateNote,
 	CallGetNoteById,
@@ -23,7 +24,11 @@ export const useNotes = (): NoteHookType => {
 	const readNotes = async () => {
 		try {
 			setLoading(true);
-			const notes = await CallListNotes();
+			const order = GetNotesOrder();
+			const notes = await CallListNotes({
+				OrderBy: order.order_by,
+				Order: order.order,
+			});
 			setNotes(notes);
 		} catch (e) {
 			console.error(e);
@@ -68,7 +73,7 @@ export const useNotes = (): NoteHookType => {
 		try {
 			setLoading(true);
 
-			const targetNote = notes.find((note) => note.ID == String(id));
+			const targetNote = notes.find((note) => note.ID === String(id));
 
 			if (targetNote?.Content !== content) {
 				await CallUpdateNote(id, content);

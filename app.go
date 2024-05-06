@@ -105,9 +105,14 @@ func (a *App) UpdateNote(id uuid.UUID, content string) (*Note, error) {
 	return note, nil
 }
 
+type ListNotesOptions struct {
+	OrderBy string
+	Order   string
+}
+
 // List notes
-func (a *App) ListNotes() ([]Note, error) {
-	notes, err := a.noteService.List()
+func (a *App) ListNotes(option ListNotesOptions) ([]Note, error) {
+	notes, err := a.noteService.List(option)
 
 	if err != nil {
 		return nil, err
