@@ -22,7 +22,7 @@ export const Images = () => {
 
 	useEffect(() => {
 		image.getImages();
-	}, []);
+	}, [image.getImages]);
 
 	return (
 		<ImageContext.Provider value={image}>

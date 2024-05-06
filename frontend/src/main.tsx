@@ -46,7 +46,11 @@ const router = createBrowserRouter([
 	},
 ]);
 
-const root = createRoot(container!);
+if (!container) {
+	throw new Error("No root element found");
+}
+
+const root = createRoot(container ? container : document.createElement("div"));
 
 root.render(
 	<React.StrictMode>

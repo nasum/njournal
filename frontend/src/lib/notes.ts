@@ -22,9 +22,9 @@ export function CallGetNoteById(id: string): Promise<Note> {
 	LogDebug(`CallGetNoteById: ${id}`);
 	if (id) {
 		return GetNote(id);
-	} else {
-		return Promise.reject("Invalid ID");
 	}
+
+	return Promise.reject("Invalid ID");
 }
 
 export function CallUpdateNote(id: string, content: string): Promise<Note> {
@@ -39,7 +39,7 @@ type ListNotesOptions = {
 export async function CallListNotes(option: ListNotesOptions): Promise<Note[]> {
 	LogDebug("CallListNotes");
 	const notes = await ListNotes(option);
-	return notes.map((note: any) => {
+	return notes.map((note) => {
 		return {
 			ID: note.ID,
 			Title: note.Title,

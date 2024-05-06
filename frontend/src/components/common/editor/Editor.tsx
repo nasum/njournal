@@ -100,7 +100,7 @@ export const Editor = ({ content, updateNote }: EditorProps) => {
 
 	useEffect(() => {
 		updateNote(value);
-	}, [value]);
+	}, [updateNote, value]);
 
 	const handleEditorChange = (editor: EditorState) => {
 		editor.read(() => {
@@ -133,7 +133,7 @@ export const Editor = ({ content, updateNote }: EditorProps) => {
 			AutoLinkNode,
 			LinkNode,
 		],
-		onError: (err: any) => {
+		onError: (err: Error) => {
 			console.error(err);
 		},
 		theme: Theme,

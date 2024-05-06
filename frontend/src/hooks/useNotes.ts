@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { GetNotesOrder } from "../lib/localStorage";
 import {
 	CallCreateNote,
 	CallGetNoteById,
@@ -6,7 +7,6 @@ import {
 	CallUpdateNote,
 	Note,
 } from "../lib/notes";
-import { GetNotesOrder } from "../lib/localStorage";
 
 export type NoteHookType = {
 	notes: Note[];
@@ -73,7 +73,7 @@ export const useNotes = (): NoteHookType => {
 		try {
 			setLoading(true);
 
-			const targetNote = notes.find((note) => note.ID == String(id));
+			const targetNote = notes.find((note) => note.ID === String(id));
 
 			if (targetNote?.Content !== content) {
 				await CallUpdateNote(id, content);

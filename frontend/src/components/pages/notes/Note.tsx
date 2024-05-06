@@ -1,12 +1,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { Link, Outlet, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 
-import { NoteHookType, useNotes } from "../../../hooks/useNotes";
-import { Editor } from "../../common/editor/Editor";
-import { GetNotesOrder, SaveNotesOrder } from "../../../lib/localStorage";
 import { DefaultContext } from "react-icons";
+import { NoteHookType, useNotes } from "../../../hooks/useNotes";
+import { GetNotesOrder, SaveNotesOrder } from "../../../lib/localStorage";
+import { Editor } from "../../common/editor/Editor";
 
 const NoteTable = styled.table`
 	width: 100%;
@@ -62,13 +62,9 @@ export const List = () => {
 	};
 
 	useEffect(() => {
-		note?.readNotes();
-	}, []);
-
-	useEffect(() => {
 		SaveNotesOrder(noteOrderBy);
 		note?.readNotes();
-	}, [noteOrderBy]);
+	}, [note?.readNotes, noteOrderBy]);
 
 	const handleOrderBy = (targetOrderBy: "updated_at" | "created_at") => {
 		console.log("called handleOrderBy");
@@ -96,6 +92,7 @@ export const List = () => {
 								noteOrderBy.order_by === "updated_at" ? "underline" : "none",
 						}}
 						onClick={() => handleOrderBy("updated_at")}
+						onKeyDown={() => handleOrderBy("updated_at")}
 					>
 						{noteOrderBy.order_by === "updated_at"
 							? OrderArrow(noteOrderBy.order)
@@ -109,6 +106,7 @@ export const List = () => {
 								noteOrderBy.order_by === "created_at" ? "underline" : "none",
 						}}
 						onClick={() => handleOrderBy("created_at")}
+						onKeyDown={() => handleOrderBy("created_at")}
 					>
 						{noteOrderBy.order_by === "created_at"
 							? OrderArrow(noteOrderBy.order)
@@ -150,7 +148,7 @@ export const Form = () => {
 				}
 			});
 		}
-	}, [id]);
+	}, [id, note?.getNote]);
 
 	const handleUpdateNote = (updatedContent: string) => {
 		if (id) {
