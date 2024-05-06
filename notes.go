@@ -1,14 +1,15 @@
 package main
 
 import (
-	"changeme/ent"
-	"changeme/ent/note"
 	"context"
 	"strings"
 	"time"
 
+	"njournal/models"
+
 	"github.com/google/uuid"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
+	"gorm.io/gorm"
 )
 
 type Note struct {
@@ -19,7 +20,7 @@ type Note struct {
 	CreatedAt time.Time
 }
 
-func createNote(rowNote *ent.Note) Note {
+func createNote(rowNote *models.Note) Note {
 	return Note{
 		ID:        rowNote.ID,
 		Title:     rowNote.Title,
@@ -29,7 +30,7 @@ func createNote(rowNote *ent.Note) Note {
 	}
 }
 
-func createNoteList(rowNotes []*ent.Note) []Note {
+func createNoteList(rowNotes []*models.Note) []Note {
 	var notes []Note
 	for _, rowNote := range rowNotes {
 		notes = append(notes, Note{
@@ -44,34 +45,37 @@ func createNoteList(rowNotes []*ent.Note) []Note {
 }
 
 type NotesService struct {
-	client *ent.Client
-	ctx    context.Context
+	db  *gorm.DB
+	ctx context.Context
 }
 
-func (n *NotesService) Create(note Note) (*Note, error) {
+func (n *NotesService) Create(noteArgs Note) (*Note, error) {
 	today := time.Now()
-	title := CreateTitle(note.Content)
+	title := CreateTitle(noteArgs.Content)
 
-	savedNote, err := n.client.Note.Create().
-		SetTitle(title).
-		SetContent(note.Content).
-		SetUpdatedAt(today).
-		SetCreatedAt(today).
-		Save(n.ctx)
+	note := &models.Note{
+		ID:        uuid.New(),
+		Title:     title,
+		Content:   noteArgs.Content,
+		UpdatedAt: today,
+		CreatedAt: today,
+	}
+	err := n.db.Create(&note).Error
 
 	if err != nil {
 		return nil, err
 	}
 
 	return &Note{
-		ID:      savedNote.ID,
-		Content: savedNote.Content,
+		ID:      note.ID,
+		Content: note.Content,
 	}, nil
 }
 
 func (n *NotesService) GetNoteByID(id uuid.UUID) (*Note, error) {
 	runtime.LogDebugf(n.ctx, "Getting note by ID: %d", id)
-	note, err := n.client.Note.Get(n.ctx, id)
+	note := &models.Note{}
+	err := n.db.Where("id = ?", id).Take(note).Error
 	if err != nil {
 		return nil, err
 	}
@@ -85,48 +89,30 @@ func (n *NotesService) Update(noteToUpdate Note) (*Note, error) {
 	today := time.Now()
 	title := CreateTitle(noteToUpdate.Content)
 
-	updatedNote, err := n.client.Note.UpdateOneID(noteToUpdate.ID).
-		SetTitle(title).
-		SetContent(noteToUpdate.Content).
-		SetUpdatedAt(today).
-		Save(n.ctx)
+	note := &models.Note{}
+	err := n.db.Where("id = ?", noteToUpdate.ID).Take(note).Error
+	if err != nil {
+		return nil, err
+	}
+
+	note.Title = title
+	note.Content = noteToUpdate.Content
+	note.UpdatedAt = today
+
+	err = n.db.Save(&note).Error
 
 	if err != nil {
 		return nil, err
 	}
 
-	noteToReturn := createNote(updatedNote)
+	noteToReturn := createNote(note)
 
 	return &noteToReturn, nil
 }
 
-func (n *NotesService) Delete(id uuid.UUID) error {
-	today := time.Now()
-
-	_, err := n.client.Note.UpdateOneID(id).
-		SetUpdatedAt(today).
-		SetDeleted(true).
-		Save(n.ctx)
-
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (n *NotesService) SearchByTitle(title string) ([]Note, error) {
-	notes, err := n.client.Note.Query().Where(note.TitleContains(title)).All(n.ctx)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return createNoteList(notes), nil
-}
-
 func (n *NotesService) List() ([]Note, error) {
-	notes, err := n.client.Note.Query().Where(note.DeletedEQ(false)).Order(ent.Desc("updated_at")).All(n.ctx)
+	var notes []*models.Note
+	err := n.db.Find(&notes).Error
 
 	if err != nil {
 		return nil, err

@@ -1,21 +1,24 @@
 package main
 
 import (
-	"changeme/ent"
 	"context"
 	"fmt"
+
+	"njournal/models"
+
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
-func GetDB(ctx context.Context, databasePath, buildType string) (*ent.Client, error) {
+func GetDB(ctx context.Context, databasePath, buildType string) (*gorm.DB, error) {
 	databaseSetup := fmt.Sprintf("file:%s/njournal.%s.db?mode=rwc&cache=shared&_fk=1", databasePath, buildType)
-
-	client, err := ent.Open("sqlite3", databaseSetup)
+	db, err := gorm.Open(sqlite.Open(databaseSetup), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}
 
-	if err := client.Schema.Create(ctx); err != nil {
-		return nil, err
-	}
-	return client, nil
+	db.AutoMigrate(&models.Note{})
+	db.AutoMigrate(&models.Image{})
+
+	return db, nil
 }

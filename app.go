@@ -1,7 +1,6 @@
 package main
 
 import (
-	"changeme/ent"
 	"context"
 	"fmt"
 	"os"
@@ -10,6 +9,7 @@ import (
 	"github.com/adrg/xdg"
 	"github.com/google/uuid"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
+	"gorm.io/gorm"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -17,7 +17,7 @@ import (
 // App struct
 type App struct {
 	ctx          context.Context
-	client       *ent.Client
+	db           *gorm.DB
 	noteService  *NotesService
 	imageService *imageService
 	config       *AppConfig
@@ -56,15 +56,15 @@ func (a *App) startup(ctx context.Context) {
 	runtime.LogDebug(a.ctx, "Loading DB")
 	runtime.LogDebug(a.ctx, "Database Path: "+a.config.DataBasePath)
 
-	a.client, err = GetDB(a.ctx, a.config.DataBasePath, env.BuildType)
+	a.db, err = GetDB(a.ctx, a.config.DataBasePath, env.BuildType)
 
 	if err != nil {
 		runtime.LogErrorf(a.ctx, "Error loading DB: "+err.Error())
 		return
 	}
 
-	a.noteService = &NotesService{client: a.client, ctx: a.ctx}
-	a.imageService = &imageService{client: a.client, ctx: a.ctx}
+	a.noteService = &NotesService{db: a.db, ctx: a.ctx}
+	a.imageService = &imageService{db: a.db, ctx: a.ctx}
 
 	runtime.LogDebug(a.ctx, "Startup complete")
 
@@ -114,20 +114,6 @@ func (a *App) ListNotes() ([]Note, error) {
 	}
 
 	return notes, nil
-}
-
-func (a *App) SearchByTitle(title string) ([]Note, error) {
-	notes, err := a.noteService.SearchByTitle(title)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return notes, nil
-}
-
-func (a *App) DeleteNote(id uuid.UUID) error {
-	return a.noteService.Delete(id)
 }
 
 func (a *App) CreateImageFromLocal(fileName string, data []byte) error {

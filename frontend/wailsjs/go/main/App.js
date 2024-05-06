@@ -10,10 +10,6 @@ export function CreateNote(arg1) {
   return window['go']['main']['App']['CreateNote'](arg1);
 }
 
-export function DeleteNote(arg1) {
-  return window['go']['main']['App']['DeleteNote'](arg1);
-}
-
 export function GetImageList() {
   return window['go']['main']['App']['GetImageList']();
 }
@@ -24,10 +20,6 @@ export function GetNote(arg1) {
 
 export function ListNotes() {
   return window['go']['main']['App']['ListNotes']();
-}
-
-export function SearchByTitle(arg1) {
-  return window['go']['main']['App']['SearchByTitle'](arg1);
 }
 
 export function UpdateNote(arg1, arg2) {
