@@ -1,11 +1,13 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useAtom, createStore, Provider } from "jotai";
 
 import { ActionButton } from "./components/common/ActionButton";
 import { SideBar } from "./components/common/SideBar";
-
 import { FooterBar } from "./components/common/FooterBar";
+
 import { useNotes } from "./hooks/useNotes";
+import { FooterTools } from "./atoms/footerTools";
 
 const AppContainer = styled.div`
 	display: flex;
@@ -29,6 +31,9 @@ const AppInner = styled.div`
 `;
 
 function App() {
+	const store = createStore();
+	store.set(FooterTools, []);
+
 	const navigate = useNavigate();
 	const note = useNotes();
 
@@ -46,14 +51,16 @@ function App() {
 
 	return (
 		<AppContainer id="App">
-			<AppInner>
-				<SideBar />
-				<MainContainer>
-					<Outlet />
-				</MainContainer>
-				<ActionButton createNote={craeteNote} />
-			</AppInner>
-			<FooterBar />
+			<Provider store={store}>
+				<AppInner>
+					<SideBar />
+					<MainContainer>
+						<Outlet />
+					</MainContainer>
+					<ActionButton createNote={craeteNote} />
+				</AppInner>
+				<FooterBar />
+			</Provider>
 		</AppContainer>
 	);
 }

@@ -8,7 +8,7 @@ const SideBarHeader = styled.div`
 
 const SideBarContent = styled.div`
   padding: 10px;
-  border-right: 1px solid #000;
+  border-right: 1px solid;
   width: 150px;
   height: 100%;
 `;

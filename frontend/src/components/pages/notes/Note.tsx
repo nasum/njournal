@@ -1,11 +1,15 @@
+import { FiClipboard } from "react-icons/fi";
+import { BsFileRichtext } from "react-icons/bs";
+import { FaRegFileAlt } from "react-icons/fa";
 import { createContext, useContext, useEffect, useState } from "react";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { Link, Outlet, useParams } from "react-router-dom";
+import { useAtom } from "jotai";
 import styled from "styled-components";
 
-import { DefaultContext } from "react-icons";
 import { NoteHookType, useNotes } from "../../../hooks/useNotes";
 import { GetNotesOrder, SaveNotesOrder } from "../../../lib/localStorage";
+import { FooterTools } from "../../../atoms/footerTools";
 import { Editor } from "../../common/editor/Editor";
 
 const NoteTable = styled.table`
@@ -64,11 +68,9 @@ export const List = () => {
 	useEffect(() => {
 		SaveNotesOrder(noteOrderBy);
 		note?.readNotes();
-	}, [note?.readNotes, noteOrderBy]);
+	}, [noteOrderBy]);
 
 	const handleOrderBy = (targetOrderBy: "updated_at" | "created_at") => {
-		console.log("called handleOrderBy");
-		console.log("targetOrderBy", targetOrderBy);
 		if (noteOrderBy.order_by === targetOrderBy) {
 			setNoteOrderBy({
 				order_by: targetOrderBy,
@@ -77,7 +79,6 @@ export const List = () => {
 		} else {
 			setNoteOrderBy({ order_by: targetOrderBy, order: "desc" });
 		}
-		console.log("new order", noteOrderBy);
 	};
 
 	return (
@@ -115,21 +116,23 @@ export const List = () => {
 					</th>
 				</tr>
 			</thead>
-			{note?.notes.map((note) => (
-				<Item key={note.ID}>
-					<td>
-						<Link to={`${note.ID}`}>
-							<Title>{note.Title || "no title"}</Title>
-						</Link>
-					</td>
-					<td>
-						<DateArea date={note.UpdatedAt || ""} />
-					</td>
-					<td>
-						<DateArea date={note.CreatedAt || ""} />
-					</td>
-				</Item>
-			))}
+			<tbody>
+				{note?.notes.map((note) => (
+					<Item key={note.ID}>
+						<td>
+							<Link to={`${note.ID}`}>
+								<Title>{note.Title || "no title"}</Title>
+							</Link>
+						</td>
+						<td>
+							<DateArea date={note.UpdatedAt || ""} />
+						</td>
+						<td>
+							<DateArea date={note.CreatedAt || ""} />
+						</td>
+					</Item>
+				))}
+			</tbody>
 		</NoteTable>
 	);
 };
@@ -137,6 +140,33 @@ export const List = () => {
 export const Form = () => {
 	const note = useContext(NoteContext);
 	const [content, setContent] = useState<string | null>(null);
+	const [isRichText, setIsRichText] = useState(true);
+
+	const [_, setFooterTools] = useAtom(FooterTools);
+
+	const ChangeRichTextButton = () => {
+		return (
+			<button
+				onClick={() => {
+					setIsRichText(!isRichText);
+				}}
+			>
+				{isRichText ? <BsFileRichtext /> : <FaRegFileAlt />}
+			</button>
+		);
+	};
+
+	const CopyNotePathButton = () => {
+		return (
+			<button
+				onClick={() => {
+					navigator.clipboard.writeText(window.location.pathname);
+				}}
+			>
+				<FiClipboard />
+			</button>
+		);
+	};
 
 	const { id } = useParams();
 
@@ -148,7 +178,14 @@ export const Form = () => {
 				}
 			});
 		}
-	}, [id, note?.getNote]);
+	}, [id]);
+
+	useEffect(() => {
+		setFooterTools([
+			<ChangeRichTextButton key="changeRichTextButton" />,
+			<CopyNotePathButton key="copyNotePathButton" />,
+		]);
+	}, [isRichText, setFooterTools]);
 
 	const handleUpdateNote = (updatedContent: string) => {
 		if (id) {
@@ -157,6 +194,10 @@ export const Form = () => {
 	};
 
 	return content !== null ? (
-		<Editor content={content} updateNote={handleUpdateNote} />
+		<Editor
+			isRitchText={isRichText}
+			content={content}
+			updateNote={handleUpdateNote}
+		/>
 	) : null;
 };
