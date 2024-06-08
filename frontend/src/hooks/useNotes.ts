@@ -5,7 +5,7 @@ import {
 	CallGetNoteById,
 	CallListNotes,
 	CallUpdateNote,
-	Note,
+	type Note,
 } from "../lib/notes";
 
 export type NoteHookType = {

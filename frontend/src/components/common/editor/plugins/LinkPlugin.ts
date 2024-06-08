@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 import { $isLinkNode } from "@lexical/link";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
@@ -9,6 +10,7 @@ import { BrowserOpenURL } from "../../../../../wailsjs/runtime";
 
 export default function LinkPlugin() {
 	const [editor] = useLexicalComposerContext();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const onClick = (e: MouseEvent) => {
@@ -30,9 +32,11 @@ export default function LinkPlugin() {
 			});
 
 			try {
-				if (href !== null) {
+				if (href?.indexOf("http") === 0 && linkNode !== null) {
 					BrowserOpenURL(href);
 					e.preventDefault();
+				} else if (href !== null) {
+					navigate(href);
 				}
 			} catch (e) {
 				console.error(e);
@@ -55,7 +59,7 @@ export default function LinkPlugin() {
 				}
 			},
 		);
-	}, [editor]);
+	}, [editor, navigate]);
 
 	return null;
 }

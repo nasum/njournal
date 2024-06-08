@@ -24,7 +24,7 @@ import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
 import { HeadingNode, QuoteNode } from "@lexical/rich-text";
 import { TableCellNode, TableNode, TableRowNode } from "@lexical/table";
-import { EditorState } from "lexical";
+import type { EditorState } from "lexical";
 
 import CodeHighlightPlugin from "./plugins/CodeHighlight";
 import LinkPlugin from "./plugins/LinkPlugin";
@@ -81,15 +81,15 @@ const PlaceholderContent = styled.div`
 `;
 
 type EditorProps = {
+	isRitchText: boolean;
 	content: string;
 	updateNote: (content: string) => void;
 };
 
 const ExtendedTransformer = [CHECK_LIST, ...TRANSFORMERS, CODE];
 
-export const Editor = ({ content, updateNote }: EditorProps) => {
+export const Editor = ({ isRitchText, content, updateNote }: EditorProps) => {
 	const [value, setValue] = useState(content);
-	const [isRitchText, setIsRitchText] = useState(true);
 	const Placeholder = () => {
 		return (
 			<PlaceholderContent className="editor-placeholder">
@@ -139,17 +139,8 @@ export const Editor = ({ content, updateNote }: EditorProps) => {
 		theme: Theme,
 	};
 
-	const handleChangeEditorType = () => {
-		setIsRitchText(!isRitchText);
-	};
-
 	return (
 		<>
-			<EditorActions>
-				<EditorActionsButton onClick={handleChangeEditorType}>
-					Change to {isRitchText ? "plain" : "ritch"} text editor
-				</EditorActionsButton>
-			</EditorActions>
 			{isRitchText ? (
 				<LexicalComposer initialConfig={editorConfig}>
 					<EditorContainer className="editor-container markdown-body">

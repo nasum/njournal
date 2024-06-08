@@ -7,12 +7,12 @@
     "node": ">=20.11.1"
   },
   "scripts": {
-    "dev": "npm run format && vite",
+    "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "format": "biome format --write ./src",
+    "format": "biome check --write ./src",
     "lint": "biome lint ./src",
-    "lint:fix": "biome check --apply ./src"
+    "lint:fix": "biome check --write ./src"
   },
   "dependencies": {
     "@acab/reset.css": "^0.8.0",
@@ -20,6 +20,7 @@
     "@types/react-icons": "^3.0.0",
     "@types/react-router": "^5.1.20",
     "github-markdown-css": "^5.5.1",
+    "jotai": "^2.8.2",
     "lexical": "^0.13.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -28,7 +29,7 @@
     "styled-components": "^6.1.8"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.5.3",
+    "@biomejs/biome": "^1.8.0",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.0.1",

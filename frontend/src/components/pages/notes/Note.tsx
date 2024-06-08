@@ -1,10 +1,20 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { useAtom } from "jotai";
+import {
+	createContext,
+	useCallback,
+	useContext,
+	useEffect,
+	useState,
+} from "react";
+import { BsFileRichtext } from "react-icons/bs";
+import { FaRegFileAlt } from "react-icons/fa";
+import { FiClipboard } from "react-icons/fi";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { Link, Outlet, useParams } from "react-router-dom";
 import styled from "styled-components";
 
-import { DefaultContext } from "react-icons";
-import { NoteHookType, useNotes } from "../../../hooks/useNotes";
+import { FooterTools } from "../../../atoms/footerTools";
+import { type NoteHookType, useNotes } from "../../../hooks/useNotes";
 import { GetNotesOrder, SaveNotesOrder } from "../../../lib/localStorage";
 import { Editor } from "../../common/editor/Editor";
 
@@ -62,13 +72,12 @@ export const List = () => {
 	};
 
 	useEffect(() => {
+		// fixit later
 		SaveNotesOrder(noteOrderBy);
 		note?.readNotes();
-	}, [note?.readNotes, noteOrderBy]);
+	}, [noteOrderBy]);
 
 	const handleOrderBy = (targetOrderBy: "updated_at" | "created_at") => {
-		console.log("called handleOrderBy");
-		console.log("targetOrderBy", targetOrderBy);
 		if (noteOrderBy.order_by === targetOrderBy) {
 			setNoteOrderBy({
 				order_by: targetOrderBy,
@@ -77,7 +86,6 @@ export const List = () => {
 		} else {
 			setNoteOrderBy({ order_by: targetOrderBy, order: "desc" });
 		}
-		console.log("new order", noteOrderBy);
 	};
 
 	return (
@@ -115,21 +123,23 @@ export const List = () => {
 					</th>
 				</tr>
 			</thead>
-			{note?.notes.map((note) => (
-				<Item key={note.ID}>
-					<td>
-						<Link to={`${note.ID}`}>
-							<Title>{note.Title || "no title"}</Title>
-						</Link>
-					</td>
-					<td>
-						<DateArea date={note.UpdatedAt || ""} />
-					</td>
-					<td>
-						<DateArea date={note.CreatedAt || ""} />
-					</td>
-				</Item>
-			))}
+			<tbody>
+				{note?.notes.map((note) => (
+					<Item key={note.ID}>
+						<td>
+							<Link to={`${note.ID}`}>
+								<Title>{note.Title || "no title"}</Title>
+							</Link>
+						</td>
+						<td>
+							<DateArea date={note.UpdatedAt || ""} />
+						</td>
+						<td>
+							<DateArea date={note.CreatedAt || ""} />
+						</td>
+					</Item>
+				))}
+			</tbody>
 		</NoteTable>
 	);
 };
@@ -137,6 +147,41 @@ export const List = () => {
 export const Form = () => {
 	const note = useContext(NoteContext);
 	const [content, setContent] = useState<string | null>(null);
+	const [isRichText, setIsRichText] = useState(true);
+
+	const [_, setFooterTools] = useAtom(FooterTools);
+
+	const toggleEditorType = useCallback(() => {
+		setIsRichText(!isRichText);
+	}, [isRichText]);
+
+	type ChangeRichTextButtonType = {
+		isRichText: boolean;
+	};
+
+	const ChangeRichTextButton = useCallback(
+		({ isRichText }: ChangeRichTextButtonType) => {
+			return (
+				<button type="button" onClick={toggleEditorType}>
+					{isRichText ? <BsFileRichtext /> : <FaRegFileAlt />}
+				</button>
+			);
+		},
+		[toggleEditorType],
+	);
+
+	const CopyNotePathButton = useCallback(() => {
+		return (
+			<button
+				type="button"
+				onClick={() => {
+					navigator.clipboard.writeText(window.location.pathname);
+				}}
+			>
+				<FiClipboard />
+			</button>
+		);
+	}, []);
 
 	const { id } = useParams();
 
@@ -148,7 +193,17 @@ export const Form = () => {
 				}
 			});
 		}
-	}, [id, note?.getNote]);
+	}, []);
+
+	useEffect(() => {
+		setFooterTools([
+			<ChangeRichTextButton
+				isRichText={isRichText}
+				key="changeRichTextButton"
+			/>,
+			<CopyNotePathButton key="copyNotePathButton" />,
+		]);
+	}, [isRichText, setFooterTools, ChangeRichTextButton, CopyNotePathButton]);
 
 	const handleUpdateNote = (updatedContent: string) => {
 		if (id) {
@@ -157,6 +212,10 @@ export const Form = () => {
 	};
 
 	return content !== null ? (
-		<Editor content={content} updateNote={handleUpdateNote} />
+		<Editor
+			isRitchText={isRichText}
+			content={content}
+			updateNote={handleUpdateNote}
+		/>
 	) : null;
 };
