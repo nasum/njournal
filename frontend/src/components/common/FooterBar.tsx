@@ -21,8 +21,8 @@ export const FooterBar = () => {
 	const [tools] = useAtom(FooterTools);
 	return (
 		<FooterBarWrapper>
-			{tools?.map((tool, index) => (
-				<ButtonWrapper key={index}>{tool}</ButtonWrapper>
+			{tools?.map((tool) => (
+				<ButtonWrapper key={String(tool)}>{tool}</ButtonWrapper>
 			))}
 		</FooterBarWrapper>
 	);
