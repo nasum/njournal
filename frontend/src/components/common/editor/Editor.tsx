@@ -24,7 +24,7 @@ import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
 import { HeadingNode, QuoteNode } from "@lexical/rich-text";
 import { TableCellNode, TableNode, TableRowNode } from "@lexical/table";
-import { EditorState } from "lexical";
+import type { EditorState } from "lexical";
 
 import CodeHighlightPlugin from "./plugins/CodeHighlight";
 import LinkPlugin from "./plugins/LinkPlugin";

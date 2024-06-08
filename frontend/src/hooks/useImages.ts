@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CallCreateImages, CallGetImages, Image } from "../lib/images";
+import { CallCreateImages, CallGetImages, type Image } from "../lib/images";
 
 export type ImageHookType = {
 	images: Image[];

@@ -1,13 +1,13 @@
+import { Provider, createStore } from "jotai";
 import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { createStore, Provider } from "jotai";
 
 import { ActionButton } from "./components/common/ActionButton";
-import { SideBar } from "./components/common/SideBar";
 import { FooterBar } from "./components/common/FooterBar";
+import { SideBar } from "./components/common/SideBar";
 
-import { useNotes } from "./hooks/useNotes";
 import { FooterTools } from "./atoms/footerTools";
+import { useNotes } from "./hooks/useNotes";
 
 const AppContainer = styled.div`
 	display: flex;

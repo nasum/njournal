@@ -1,15 +1,21 @@
-import { FiClipboard } from "react-icons/fi";
+import { useAtom } from "jotai";
+import {
+	createContext,
+	useCallback,
+	useContext,
+	useEffect,
+	useState,
+} from "react";
 import { BsFileRichtext } from "react-icons/bs";
 import { FaRegFileAlt } from "react-icons/fa";
-import { createContext, useContext, useEffect, useState } from "react";
+import { FiClipboard } from "react-icons/fi";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { Link, Outlet, useParams } from "react-router-dom";
-import { useAtom } from "jotai";
 import styled from "styled-components";
 
-import { NoteHookType, useNotes } from "../../../hooks/useNotes";
-import { GetNotesOrder, SaveNotesOrder } from "../../../lib/localStorage";
 import { FooterTools } from "../../../atoms/footerTools";
+import { type NoteHookType, useNotes } from "../../../hooks/useNotes";
+import { GetNotesOrder, SaveNotesOrder } from "../../../lib/localStorage";
 import { Editor } from "../../common/editor/Editor";
 
 const NoteTable = styled.table`
@@ -66,6 +72,7 @@ export const List = () => {
 	};
 
 	useEffect(() => {
+		// fixit later
 		SaveNotesOrder(noteOrderBy);
 		note?.readNotes();
 	}, [noteOrderBy]);
@@ -144,27 +151,26 @@ export const Form = () => {
 
 	const [_, setFooterTools] = useAtom(FooterTools);
 
-	const toggleEditorType = () => {
+	const toggleEditorType = useCallback(() => {
 		setIsRichText(!isRichText);
-	};
+	}, [isRichText]);
 
 	type ChangeRichTextButtonType = {
 		isRichText: boolean;
-		toggleEditorType: () => void;
 	};
 
-	const ChangeRichTextButton = ({
-		isRichText,
-		toggleEditorType,
-	}: ChangeRichTextButtonType) => {
-		return (
-			<button type="button" onClick={toggleEditorType}>
-				{isRichText ? <BsFileRichtext /> : <FaRegFileAlt />}
-			</button>
-		);
-	};
+	const ChangeRichTextButton = useCallback(
+		({ isRichText }: ChangeRichTextButtonType) => {
+			return (
+				<button type="button" onClick={toggleEditorType}>
+					{isRichText ? <BsFileRichtext /> : <FaRegFileAlt />}
+				</button>
+			);
+		},
+		[toggleEditorType],
+	);
 
-	const CopyNotePathButton = () => {
+	const CopyNotePathButton = useCallback(() => {
 		return (
 			<button
 				type="button"
@@ -175,7 +181,7 @@ export const Form = () => {
 				<FiClipboard />
 			</button>
 		);
-	};
+	}, []);
 
 	const { id } = useParams();
 
@@ -187,18 +193,17 @@ export const Form = () => {
 				}
 			});
 		}
-	}, [id]);
+	}, []);
 
 	useEffect(() => {
 		setFooterTools([
 			<ChangeRichTextButton
 				isRichText={isRichText}
-				toggleEditorType={toggleEditorType}
 				key="changeRichTextButton"
 			/>,
 			<CopyNotePathButton key="copyNotePathButton" />,
 		]);
-	}, [isRichText, setFooterTools, toggleEditorType]);
+	}, [isRichText, setFooterTools, ChangeRichTextButton, CopyNotePathButton]);
 
 	const handleUpdateNote = (updatedContent: string) => {
 		if (id) {

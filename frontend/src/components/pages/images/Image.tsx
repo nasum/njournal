@@ -1,6 +1,6 @@
 import {
-	DragEvent,
-	ReactNode,
+	type DragEvent,
+	type ReactNode,
 	createContext,
 	useContext,
 	useEffect,
@@ -9,7 +9,7 @@ import {
 } from "react";
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
-import { ImageHookType, useImages } from "../../../hooks/useImages";
+import { type ImageHookType, useImages } from "../../../hooks/useImages";
 
 const ImageContext = createContext<ImageHookType | null>(null);
 
@@ -137,7 +137,7 @@ export const ImageList = () => {
 			<ImageListContainer>
 				{image?.images.map((image, index) => {
 					return (
-						<ImageWrapper tabIndex={0}>
+						<ImageWrapper key={image.ID} tabIndex={0}>
 							<img
 								key={image.ID}
 								src={image.Data}
