@@ -144,13 +144,21 @@ export const Form = () => {
 
 	const [_, setFooterTools] = useAtom(FooterTools);
 
-	const ChangeRichTextButton = () => {
+	const toggleEditorType = () => {
+		setIsRichText(!isRichText);
+	};
+
+	type ChangeRichTextButtonType = {
+		isRichText: boolean;
+		toggleEditorType: () => void;
+	};
+
+	const ChangeRichTextButton = ({
+		isRichText,
+		toggleEditorType,
+	}: ChangeRichTextButtonType) => {
 		return (
-			<button
-				onClick={() => {
-					setIsRichText(!isRichText);
-				}}
-			>
+			<button type="button" onClick={toggleEditorType}>
 				{isRichText ? <BsFileRichtext /> : <FaRegFileAlt />}
 			</button>
 		);
@@ -159,6 +167,7 @@ export const Form = () => {
 	const CopyNotePathButton = () => {
 		return (
 			<button
+				type="button"
 				onClick={() => {
 					navigator.clipboard.writeText(window.location.pathname);
 				}}
@@ -182,10 +191,14 @@ export const Form = () => {
 
 	useEffect(() => {
 		setFooterTools([
-			<ChangeRichTextButton key="changeRichTextButton" />,
+			<ChangeRichTextButton
+				isRichText={isRichText}
+				toggleEditorType={toggleEditorType}
+				key="changeRichTextButton"
+			/>,
 			<CopyNotePathButton key="copyNotePathButton" />,
 		]);
-	}, [isRichText, setFooterTools]);
+	}, [isRichText, setFooterTools, toggleEditorType]);
 
 	const handleUpdateNote = (updatedContent: string) => {
 		if (id) {

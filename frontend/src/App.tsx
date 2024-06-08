@@ -1,6 +1,6 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useAtom, createStore, Provider } from "jotai";
+import { createStore, Provider } from "jotai";
 
 import { ActionButton } from "./components/common/ActionButton";
 import { SideBar } from "./components/common/SideBar";
