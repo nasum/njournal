@@ -18,7 +18,7 @@ export function CallCreateImages(
 export async function CallGetImages(): Promise<Image[]> {
 	LogDebug("CallGetImages");
 	const imageList = await GetImageList();
-
+	console.trace()
 	return imageList.map((image) => {
 		return {
 			ID: image.ID,

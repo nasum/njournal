@@ -140,6 +140,7 @@ func (a *App) CreateImageFromLocal(fileName string, data []byte) error {
 }
 
 func (a *App) GetImageList() ([]Image, error) {
+	runtime.LogDebug(a.ctx, "Getting image list")
 	images, err := a.imageService.List(a.config.ImageBasePath)
 
 	if err != nil {
