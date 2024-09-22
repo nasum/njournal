@@ -54,7 +54,7 @@ func (a *App) startup(ctx context.Context) {
 	a.config = appConfig
 
 	runtime.LogDebug(a.ctx, "Loading DB")
-	runtime.LogDebug(a.ctx, "Database Path: "+a.config.DataBasePath)
+	runtime.LogDebug(a.ctx, "Database Path: " + a.config.DataBasePath)
 
 	a.db, err = GetDB(a.ctx, a.config.DataBasePath, env.BuildType)
 
@@ -141,6 +141,7 @@ func (a *App) CreateImageFromLocal(fileName string, data []byte) error {
 
 func (a *App) GetImageList() ([]Image, error) {
 	runtime.LogDebug(a.ctx, "Getting image list")
+	runtime.LogDebug(a.ctx, "Image Base Path: " + a.config.ImageBasePath)
 	images, err := a.imageService.List(a.config.ImageBasePath)
 
 	if err != nil {

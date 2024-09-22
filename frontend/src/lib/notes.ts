@@ -4,6 +4,7 @@ import {
 	ListNotes,
 	UpdateNote,
 } from "../../wailsjs/go/main/App";
+import { main } from "../../wailsjs/go/models";
 import { LogDebug } from "../../wailsjs/runtime";
 
 export type Note = {
@@ -14,11 +15,11 @@ export type Note = {
 	CreatedAt?: string;
 };
 
-export function CallCreateNote(note: Note): Promise<Note> {
+export function CallCreateNote(note: Note): Promise<main.Note> {
 	return CreateNote(note.Content);
 }
 
-export function CallGetNoteById(id: string): Promise<Note> {
+export function CallGetNoteById(id: string): Promise<main.Note> {
 	LogDebug(`CallGetNoteById: ${id}`);
 	if (id) {
 		return GetNote(id);
@@ -27,7 +28,7 @@ export function CallGetNoteById(id: string): Promise<Note> {
 	return Promise.reject("Invalid ID");
 }
 
-export function CallUpdateNote(id: string, content: string): Promise<Note> {
+export function CallUpdateNote(id: string, content: string): Promise<main.Note> {
 	return UpdateNote(id, content);
 }
 
@@ -36,12 +37,12 @@ type ListNotesOptions = {
 	Order?: "asc" | "desc";
 };
 
-export async function CallListNotes(option: ListNotesOptions): Promise<Note[]> {
+export async function CallListNotes(option: main.ListNotesOptions): Promise<Note[]> {
 	LogDebug("CallListNotes");
 	const notes = await ListNotes(option);
 	return notes.map((note) => {
 		return {
-			ID: note.ID,
+			ID: String(note.ID),
 			Title: note.Title,
 			Content: note.Content,
 			UpdatedAt: note.UpdatedAt,

@@ -46,10 +46,10 @@ func loadConfig(configPath string) (*AppConfig, error) {
 	}
 
 	imageBasePath := xdg.UserDirs.Pictures
-	imagePath := "/njournal"
+	imagePath := "njournal"
 
 	if _, err := os.Stat(fmt.Sprintf("%v/%v", imageBasePath, imagePath)); os.IsNotExist(err) {
-		err = os.MkdirAll(imagePath, 0755)
+		err = os.MkdirAll(fmt.Sprintf("%v/%v", imageBasePath, imagePath), 0755)
 		if err != nil {
 			return nil, fmt.Errorf("error creating data directory: %s", err)
 		}

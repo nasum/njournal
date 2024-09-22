@@ -1,10 +1,8 @@
 module njournal
 
-go 1.22
+go 1.23.1
 
-toolchain go1.22.0
-
-// replace github.com/wailsapp/wails/v2 v2.7.1 => /home/nasum/pkg/mod
+// replace github.com/wailsapp/wails/v2 v2.9.2 => /home/nasum/pkg/mod
 
 require (
 	github.com/adrg/xdg v0.5.0
