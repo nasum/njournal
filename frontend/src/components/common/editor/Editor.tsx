@@ -24,7 +24,7 @@ import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
 import { HeadingNode, QuoteNode } from "@lexical/rich-text";
 import { TableCellNode, TableNode, TableRowNode } from "@lexical/table";
-import type { EditorState } from "lexical";
+import type { EditorState, LexicalEditor } from 'lexical';
 
 import CodeHighlightPlugin from "./plugins/CodeHighlight";
 import LinkPlugin from "./plugins/LinkPlugin";
@@ -102,8 +102,8 @@ export const Editor = ({ isRitchText, content, updateNote }: EditorProps) => {
 		updateNote(value);
 	}, [updateNote, value]);
 
-	const handleEditorChange = (editor: EditorState) => {
-		editor.read(() => {
+	const handleEditorChange = (editorState: EditorState, editor: LexicalEditor, tags: Set<string>) => {
+		editorState.read(() => {
 			const markdown = $convertToMarkdownString(ExtendedTransformer);
 			setValue(markdown);
 		});

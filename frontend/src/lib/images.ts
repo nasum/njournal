@@ -1,4 +1,5 @@
 import { CreateImageFromLocal, GetImageList } from "../../wailsjs/go/main/App";
+import { main } from "../../wailsjs/go/models";
 import { LogDebug } from "../../wailsjs/runtime";
 
 export type Image = {
@@ -18,10 +19,9 @@ export function CallCreateImages(
 export async function CallGetImages(): Promise<Image[]> {
 	LogDebug("CallGetImages");
 	const imageList = await GetImageList();
-	console.trace()
 	return imageList.map((image) => {
 		return {
-			ID: image.ID,
+			ID: String(image.ID),
 			Data: image.Data,
 			UpdatedAt: image.UpdatedAt,
 			CreatedAt: image.CreatedAt,

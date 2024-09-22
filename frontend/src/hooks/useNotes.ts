@@ -7,14 +7,15 @@ import {
 	CallUpdateNote,
 	type Note,
 } from "../lib/notes";
+import { main } from "../../wailsjs/go/models";
 
 export type NoteHookType = {
 	notes: Note[];
 	loading: boolean;
 	readNotes: () => void;
-	createNote: (content: string) => Promise<Note | null>;
+	createNote: (content: string) => Promise<main.Note | null>;
 	updateNote: (id: string, content: string) => void;
-	getNote: (id: string) => Promise<Note | null>;
+	getNote: (id: string) => Promise<main.Note | null>;
 };
 
 export const useNotes = (): NoteHookType => {
@@ -37,7 +38,7 @@ export const useNotes = (): NoteHookType => {
 		}
 	};
 
-	const getNote = async (id: string) => {
+	const getNote = async (id: string): Promise<main.Note | null> => {
 		try {
 			setLoading(true);
 			const note = await CallGetNoteById(id);
@@ -51,7 +52,7 @@ export const useNotes = (): NoteHookType => {
 		return null;
 	};
 
-	const createNote = async (content = ""): Promise<Note | null> => {
+	const createNote = async (content = ""): Promise<main.Note | null> => {
 		try {
 			setLoading(true);
 			const note = await CallCreateNote({
