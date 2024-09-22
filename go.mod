@@ -8,7 +8,7 @@ toolchain go1.22.0
 
 require (
 	github.com/adrg/xdg v0.5.0
-	github.com/google/uuid v1.3.0
+	github.com/google/uuid v1.6.0
 	github.com/mattn/go-sqlite3 v1.14.22
 	github.com/wailsapp/wails/v2 v2.9.2
 	gorm.io/driver/sqlite v1.5.6
