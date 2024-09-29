@@ -20,10 +20,6 @@ export const Images = () => {
 		return null;
 	}
 
-	useEffect(() => {
-		image.getImages();
-	}, [image.getImages]);
-
 	return (
 		<ImageContext.Provider value={image}>
 			<Outlet />
@@ -101,6 +97,10 @@ export const ImageList = () => {
 	const image = useContext(ImageContext);
 
 	const [selectedImageData, setSelectedImageData] = useState<string>("");
+
+	useEffect(() => {
+		image?.getImages();
+	}, []);
 
 	const onDropFile = (files: FileList) => {
 		for (let i = 0; i < files.length; i++) {

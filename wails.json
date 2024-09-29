@@ -6,7 +6,7 @@
   "frontend:build": "npm run build",
   "frontend:dev:watcher": "npm run dev",
   "frontend:dev:serverUrl": "auto",
-  "debounceMS": 2000,
+  "debounceMS": 120000,
   "author": {
     "name": "nasum",
     "email": "tomato.wonder.life@gmail.com"
