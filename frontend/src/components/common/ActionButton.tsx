@@ -13,6 +13,11 @@ const BaseButtonStyle = styled.div`
   text-align: center;
   line-height: 40px;
   cursor: pointer;
+	background-color: #fff;
+
+	@media (prefers-color-scheme: dark) {
+		background-color: #000;
+	}
 `;
 
 type ActionButtonProps = {
