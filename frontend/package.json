@@ -15,7 +15,7 @@
     "lint:fix": "biome check --write ./src"
   },
   "dependencies": {
-    "@acab/reset.css": "^0.10.0",
+    "@acab/reset.css": "^0.11.0",
     "@lexical/react": "^0.17.1",
     "@types/react-icons": "^3.0.0",
     "@types/react-router": "^5.1.20",
