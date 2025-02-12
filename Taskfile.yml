@@ -9,3 +9,6 @@ tasks:
   default:
     cmds:
       - wails dev -tags webkit2_41
+  release:
+    cmds:
+      - scripts/release.sh
