@@ -1,6 +1,6 @@
 module njournal
 
-go 1.23.1
+go 1.23.6
 
 // replace github.com/wailsapp/wails/v2 v2.9.2 => /home/nasum/pkg/mod
 
