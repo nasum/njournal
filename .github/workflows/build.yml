@@ -34,6 +34,7 @@ jobs:
         with:
           build-name: 'njournal'
           build-platform: ${{ matrix.build.platform }}
+          nsis: true
           package: true
-          go-version: '1.23.1'
-          node-version: '21.5.0'
+          go-version: '1.23.6'
+          node-version: '22.14.0'
