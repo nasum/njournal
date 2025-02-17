@@ -18,7 +18,7 @@
     "@acab/reset.css": "^0.11.0",
     "@lexical/react": "^0.24.0",
     "github-markdown-css": "^5.8.1",
-    "jotai": "^2.12.0",
+    "jotai": "^2.12.1",
     "lexical": "^0.24.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
