@@ -19,7 +19,7 @@ import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
-import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
+import { OnChangePlugin} from "@lexical/react/LexicalOnChangePlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
 import { HeadingNode, QuoteNode } from "@lexical/rich-text";
@@ -31,6 +31,7 @@ import LinkPlugin from "./plugins/LinkPlugin";
 import { Theme } from "./theme/Theme";
 
 import "github-markdown-css";
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 
 const PlainTextEditor = styled.textarea`
 	width: 100%;
@@ -98,14 +99,11 @@ export const Editor = ({ isRitchText, content, updateNote }: EditorProps) => {
 		);
 	};
 
-	useEffect(() => {
-		updateNote(value);
-	}, [updateNote, value]);
-
 	const handleEditorChange = (editorState: EditorState, editor: LexicalEditor, tags: Set<string>) => {
 		editorState.read(() => {
 			const markdown = $convertToMarkdownString(ExtendedTransformer);
 			setValue(markdown);
+			updateNote(markdown);
 		});
 	};
 
@@ -113,12 +111,13 @@ export const Editor = ({ isRitchText, content, updateNote }: EditorProps) => {
 		event: React.ChangeEvent<HTMLTextAreaElement>,
 	) => {
 		setValue(event.target.value);
+		updateNote(event.target.value);
 	};
 
 	const editorConfig = {
 		namespace: "editor",
 		editorState: () => {
-			$convertFromMarkdownString(value || content, ExtendedTransformer);
+			$convertFromMarkdownString(content, ExtendedTransformer);
 		},
 		nodes: [
 			HeadingNode,
@@ -139,10 +138,14 @@ export const Editor = ({ isRitchText, content, updateNote }: EditorProps) => {
 		theme: Theme,
 	};
 
+	useEffect(() => {
+		setValue(content);
+	}, [content]);
+
 	return (
 		<>
 			{isRitchText ? (
-				<LexicalComposer initialConfig={editorConfig}>
+				<LexicalComposer initialConfig={editorConfig} key={content}>
 					<EditorContainer className="editor-container markdown-body">
 						<RichTextPlugin
 							contentEditable={<ContentEditable className="editor-input" />}

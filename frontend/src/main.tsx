@@ -23,10 +23,6 @@ const router = createBrowserRouter([
 				element: <Notes />,
 				children: [
 					{
-						path: "",
-						element: <List />,
-					},
-					{
 						path: ":id",
 						element: <Form />,
 					},

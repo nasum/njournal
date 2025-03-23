@@ -57,6 +57,7 @@ export const Notes = () => {
 
 	return (
 		<NoteContext.Provider value={note}>
+			<List></List>
 			<Outlet />
 		</NoteContext.Provider>
 	);
@@ -188,12 +189,13 @@ export const Form = () => {
 	useEffect(() => {
 		if (id) {
 			note?.getNote(id).then((n) => {
+				console.log("note", n);
 				if (n) {
 					setContent(n.Content);
 				}
 			});
 		}
-	}, []);
+	}, [id]);
 
 	useEffect(() => {
 		setFooterTools([
