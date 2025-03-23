@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 
 import { $isLinkNode } from "@lexical/link";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import type { LexicalEditor } from "lexical";
+import type { LexicalEditor, LexicalNode } from "lexical";
 import { $getNearestNodeFromDOMNode } from "lexical";
 
 import { BrowserOpenURL } from "../../../../../wailsjs/runtime";
