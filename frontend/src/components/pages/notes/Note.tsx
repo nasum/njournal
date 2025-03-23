@@ -18,8 +18,9 @@ import { type NoteHookType, useNotes } from "../../../hooks/useNotes";
 import { GetNotesOrder, SaveNotesOrder } from "../../../lib/localStorage";
 import { Editor } from "../../common/editor/Editor";
 
-const NoteTable = styled.table`
-	width: 100%;
+const NoteTable = styled.div`
+	width: 175px;
+	font-size: 15px;
 `;
 
 const Item = styled.tr`
@@ -29,8 +30,17 @@ const Title = styled.div`
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	width: 500px;
+	width: 175px;
 `;
+
+const NoteContainer = styled.div`
+	display: flex;
+`;
+
+const EditorArea = styled.div`
+	flex: 1 ;
+`;
+
 
 const NoteContext = createContext<NoteHookType | null>(null);
 
@@ -57,8 +67,12 @@ export const Notes = () => {
 
 	return (
 		<NoteContext.Provider value={note}>
-			<List></List>
-			<Outlet />
+			<NoteContainer>
+				<List></List>
+				<EditorArea>
+					<Outlet />
+				</EditorArea>
+			</NoteContainer>
 		</NoteContext.Provider>
 	);
 };
@@ -68,8 +82,18 @@ export const List = () => {
 	const [noteOrderBy, setNoteOrderBy] = useState(GetNotesOrder());
 
 	const DateArea = ({ date }: { date: string }) => {
+		const now = new Date();
 		const datetime = new Date(date).toLocaleString();
-		return <span>{datetime}</span>;
+		const diff = now.getTime() - new Date(date).getTime();
+		if (diff < 1000 * 60 * 60) {
+			return <span>{Math.floor(diff / 1000 / 60)} minutes ago</span>;
+		} else if (diff < 1000 * 60 * 60 * 24) {
+			return <span>{Math.floor(diff / 1000 / 60 / 60)} hours ago</span>;
+		} else if (diff < 1000 * 60 * 60 * 24 * 7) {
+			return <span>{Math.floor(diff / 1000 / 60 / 60 / 24)} days ago</span>;
+		} else {
+			return <span>{datetime}</span>;
+		}
 	};
 
 	useEffect(() => {
@@ -91,56 +115,23 @@ export const List = () => {
 
 	return (
 		<NoteTable>
-			<thead>
-				<tr>
-					<th>Title</th>
-					<th
-						style={{
-							cursor: "pointer",
-							textDecoration:
-								noteOrderBy.order_by === "updated_at" ? "underline" : "none",
-						}}
-						onClick={() => handleOrderBy("updated_at")}
-						onKeyDown={() => handleOrderBy("updated_at")}
-					>
-						{noteOrderBy.order_by === "updated_at"
-							? OrderArrow(noteOrderBy.order)
-							: null}
-						Updated At
-					</th>
-					<th
-						style={{
-							cursor: "pointer",
-							textDecoration:
-								noteOrderBy.order_by === "created_at" ? "underline" : "none",
-						}}
-						onClick={() => handleOrderBy("created_at")}
-						onKeyDown={() => handleOrderBy("created_at")}
-					>
-						{noteOrderBy.order_by === "created_at"
-							? OrderArrow(noteOrderBy.order)
-							: null}
-						Created At
-					</th>
-				</tr>
-			</thead>
-			<tbody>
+			<div>
+				<button onClick={() => handleOrderBy("updated_at")}>
+					Updated {OrderArrow(noteOrderBy.order_by === "updated_at" ? noteOrderBy.order : "asc")}
+				</button>
+				<button onClick={() => handleOrderBy("created_at")}>
+					Created {OrderArrow(noteOrderBy.order_by === "created_at" ? noteOrderBy.order : "asc")}
+				</button>
+			</div>
+			<ul>
 				{note?.notes.map((note) => (
-					<Item key={note.ID}>
-						<td>
-							<Link to={`${note.ID}`}>
-								<Title>{note.Title || "no title"}</Title>
-							</Link>
-						</td>
-						<td>
-							<DateArea date={note.UpdatedAt || ""} />
-						</td>
-						<td>
-							<DateArea date={note.CreatedAt || ""} />
-						</td>
-					</Item>
+					<li key={note.ID}>
+						<Link to={`${note.ID}`}>
+							<Title>{note.Title || "no title"}</Title>
+						</Link>
+					</li>
 				))}
-			</tbody>
+			</ul>
 		</NoteTable>
 	);
 };
