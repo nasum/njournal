@@ -29,12 +29,11 @@ jobs:
           submodules: recursive
 
       - name: Build wails
-        uses: dAppServer/wails-build-action@main
+        uses: dAppServer/wails-build-action@v2
         id: build
         with:
           build-name: 'njournal'
           build-platform: ${{ matrix.build.platform }}
-          nsis: true
           package: true
           go-version: '1.24.1'
           node-version: '22.14.0'
