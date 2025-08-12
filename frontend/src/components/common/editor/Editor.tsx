@@ -1,6 +1,3 @@
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-
 import { CodeHighlightNode, CodeNode } from "@lexical/code";
 import { AutoLinkNode, LinkNode } from "@lexical/link";
 import { ListItemNode, ListNode } from "@lexical/list";
@@ -19,12 +16,14 @@ import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
-import { OnChangePlugin} from "@lexical/react/LexicalOnChangePlugin";
+import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
 import { HeadingNode, QuoteNode } from "@lexical/rich-text";
 import { TableCellNode, TableNode, TableRowNode } from "@lexical/table";
-import type { EditorState, LexicalEditor } from 'lexical';
+import type { EditorState, LexicalEditor } from "lexical";
+import { useEffect, useState } from "react";
+import styled from "styled-components";
 
 import CodeHighlightPlugin from "./plugins/CodeHighlight";
 import LinkPlugin from "./plugins/LinkPlugin";
@@ -99,7 +98,11 @@ export const Editor = ({ isRitchText, content, updateNote }: EditorProps) => {
 		);
 	};
 
-	const handleEditorChange = (editorState: EditorState, editor: LexicalEditor, tags: Set<string>) => {
+	const handleEditorChange = (
+		editorState: EditorState,
+		editor: LexicalEditor,
+		tags: Set<string>,
+	) => {
 		editorState.read(() => {
 			const markdown = $convertToMarkdownString(ExtendedTransformer);
 			setValue(markdown);

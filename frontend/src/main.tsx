@@ -1,6 +1,6 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import "@acab/reset.css";
 import App from "./App";
@@ -41,7 +41,7 @@ const router = createBrowserRouter([
 			{
 				path: "/settings",
 				element: <h1>Settings</h1>,
-			}
+			},
 		],
 	},
 ]);

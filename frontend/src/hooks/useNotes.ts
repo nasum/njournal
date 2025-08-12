@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { main } from "../../wailsjs/go/models";
 import { GetNotesOrder } from "../lib/localStorage";
 import {
 	CallCreateNote,
@@ -7,7 +8,6 @@ import {
 	CallUpdateNote,
 	type Note,
 } from "../lib/notes";
-import { main } from "../../wailsjs/go/models";
 
 export type NoteHookType = {
 	notes: Note[];

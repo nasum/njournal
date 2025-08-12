@@ -2,81 +2,81 @@
  * @file CheckboxStyle.css
  * @brief CSS for the checkbox component
  * The following code was taken from the lexical-playground repository
- * https://github.com/facebook/lexical/blob/4eb91a8c20d8c79c569c27bdebecbe5341fa91ce/packages/lexical-playground/src/themes/PlaygroundEditorTheme.css#L319C1-L378C2 
+ * https://github.com/facebook/lexical/blob/4eb91a8c20d8c79c569c27bdebecbe5341fa91ce/packages/lexical-playground/src/themes/PlaygroundEditorTheme.css#L319C1-L378C2
  *
  * This code is licensed under the MIT License
  */
 
 .EditorTheme__listItemChecked,
 .EditorTheme__listItemUnchecked {
-  position: relative;
-  margin-left: 8px;
-  margin-right: 8px;
-  padding-left: 24px;
-  padding-right: 24px;
-  list-style-type: none;
-  outline: none;
+	position: relative;
+	margin-left: 8px;
+	margin-right: 8px;
+	padding-left: 24px;
+	padding-right: 24px;
+	list-style-type: none;
+	outline: none;
 }
 .EditorTheme__listItemChecked {
-  text-decoration: line-through;
+	text-decoration: line-through;
 }
 .EditorTheme__listItemUnchecked:before,
 .EditorTheme__listItemChecked:before {
-  content: '';
-  width: 16px;
-  height: 16px;
-  top: 2px;
-  left: 0;
-  cursor: pointer;
-  display: block;
-  background-size: cover;
-  position: absolute;
+	content: "";
+	width: 16px;
+	height: 16px;
+	top: 2px;
+	left: 0;
+	cursor: pointer;
+	display: block;
+	background-size: cover;
+	position: absolute;
 }
-.EditorTheme__listItemUnchecked[dir='rtl']:before,
-.EditorTheme__listItemChecked[dir='rtl']:before {
-  left: auto;
-  right: 0;
+.EditorTheme__listItemUnchecked[dir="rtl"]:before,
+.EditorTheme__listItemChecked[dir="rtl"]:before {
+	left: auto;
+	right: 0;
 }
 .EditorTheme__listItemUnchecked:focus:before,
 .EditorTheme__listItemChecked:focus:before {
-  box-shadow: 0 0 0 2px #a6cdfe;
-  border-radius: 2px;
+	box-shadow: 0 0 0 2px #a6cdfe;
+	border-radius: 2px;
 }
 .EditorTheme__listItemUnchecked:before {
-  border: 1px solid #999;
-  border-radius: 2px;
+	border: 1px solid #999;
+	border-radius: 2px;
 }
 .EditorTheme__listItemChecked:before {
-  border: 1px solid rgb(61, 135, 245);
-  border-radius: 2px;
-  background-color: #3d87f5;
-  background-repeat: no-repeat;
+	border: 1px solid rgb(61, 135, 245);
+	border-radius: 2px;
+	background-color: #3d87f5;
+	background-repeat: no-repeat;
 }
 .EditorTheme__listItemChecked:after {
-  content: '';
-  cursor: pointer;
-  border-color: #fff;
-  border-style: solid;
-  position: absolute;
-  display: block;
-  top: 6px;
-  width: 3px;
-  left: 7px;
-  right: 7px;
-  height: 6px;
-  transform: rotate(45deg);
-  border-width: 0 2px 2px 0;
+	content: "";
+	cursor: pointer;
+	border-color: #fff;
+	border-style: solid;
+	position: absolute;
+	display: block;
+	top: 6px;
+	width: 3px;
+	left: 7px;
+	right: 7px;
+	height: 6px;
+	transform: rotate(45deg);
+	border-width: 0 2px 2px 0;
 }
 
 .EditorTheme__nestedListItem {
-  list-style-type: none;
+	list-style-type: none;
 }
 .EditorTheme__nestedListItem:before,
 .EditorTheme__nestedListItem:after {
-  display: none;
+	display: none;
 }
 
 .editor-input {
-  padding: 25px 0;
-  outline: none;
+	padding: 25px 0;
+	outline: none;
 }

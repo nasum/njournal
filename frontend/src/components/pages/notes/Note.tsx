@@ -8,8 +8,7 @@ import {
 } from "react";
 import { BsFileRichtext } from "react-icons/bs";
 import { FaRegFileAlt } from "react-icons/fa";
-import { FiClipboard } from "react-icons/fi";
-import { FiChevronDown, FiChevronUp } from "react-icons/fi";
+import { FiChevronDown, FiChevronUp, FiClipboard } from "react-icons/fi";
 import { Link, Outlet, useParams } from "react-router-dom";
 import styled from "styled-components";
 
@@ -40,7 +39,6 @@ const NoteContainer = styled.div`
 const EditorArea = styled.div`
 	flex: 1 ;
 `;
-
 
 const NoteContext = createContext<NoteHookType | null>(null);
 
@@ -117,10 +115,16 @@ export const List = () => {
 		<NoteTable>
 			<div>
 				<button onClick={() => handleOrderBy("updated_at")}>
-					Updated {OrderArrow(noteOrderBy.order_by === "updated_at" ? noteOrderBy.order : "asc")}
+					Updated{" "}
+					{OrderArrow(
+						noteOrderBy.order_by === "updated_at" ? noteOrderBy.order : "asc",
+					)}
 				</button>
 				<button onClick={() => handleOrderBy("created_at")}>
-					Created {OrderArrow(noteOrderBy.order_by === "created_at" ? noteOrderBy.order : "asc")}
+					Created{" "}
+					{OrderArrow(
+						noteOrderBy.order_by === "created_at" ? noteOrderBy.order : "asc",
+					)}
 				</button>
 			</div>
 			<ul>

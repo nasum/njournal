@@ -1,12 +1,10 @@
-import { Provider, createStore } from "jotai";
+import { createStore, Provider } from "jotai";
 import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-
+import { FooterTools } from "./atoms/footerTools";
 import { ActionButton } from "./components/common/ActionButton";
 import { FooterBar } from "./components/common/FooterBar";
 import { SideBar } from "./components/common/SideBar";
-
-import { FooterTools } from "./atoms/footerTools";
 import { useNotes } from "./hooks/useNotes";
 
 const AppContainer = styled.div`

@@ -8,7 +8,7 @@
 
 import { registerCodeHighlighting } from "@lexical/code";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { JSX, useEffect } from "react";
+import { type JSX, useEffect } from "react";
 
 export default function CodeHighlightPlugin(): JSX.Element | null {
 	const [editor] = useLexicalComposerContext();
