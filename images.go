@@ -14,10 +14,10 @@ import (
 )
 
 type Image struct {
-	ID        uuid.UUID
-	Data      string
-	UpdatedAt time.Time
-	CreatedAt time.Time
+	ID        uuid.UUID `json:"id"`
+	Data      string    `json:"data"`
+	UpdatedAt time.Time `json:"updatedAt"`
+	CreatedAt time.Time `json:"createdAt"`
 }
 
 type imageService struct {

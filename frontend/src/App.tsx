@@ -44,7 +44,7 @@ function App() {
 	const craeteNote = () => {
 		note.createNote("").then((note) => {
 			if (note) {
-				navigate(`/notes/${note.ID}`);
+				navigate(`/notes/${note.id}`);
 			}
 		});
 	};

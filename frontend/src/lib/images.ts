@@ -21,10 +21,10 @@ export async function CallGetImages(): Promise<Image[]> {
 	const imageList = await GetImageList();
 	return imageList.map((image) => {
 		return {
-			ID: String(image.ID),
-			Data: image.Data,
-			UpdatedAt: image.UpdatedAt,
-			CreatedAt: image.CreatedAt,
+			ID: String(image.id),
+			Data: image.data,
+			UpdatedAt: image.updatedAt,
+			CreatedAt: image.createdAt,
 		};
 	});
 }

@@ -182,7 +182,7 @@ export const Form = () => {
 			note?.getNote(id).then((n) => {
 				console.log("note", n);
 				if (n) {
-					setContent(n.Content);
+					setContent(n.content);
 				}
 			});
 		}

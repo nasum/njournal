@@ -42,11 +42,11 @@ export async function CallListNotes(option: main.ListNotesOptions): Promise<Note
 	const notes = await ListNotes(option);
 	return notes.map((note) => {
 		return {
-			ID: String(note.ID),
-			Title: note.Title,
-			Content: note.Content,
-			UpdatedAt: note.UpdatedAt,
-			CreatedAt: note.CreatedAt,
+			ID: String(note.id),
+			Title: note.title,
+			Content: note.content,
+			UpdatedAt: note.updatedAt,
+			CreatedAt: note.createdAt,
 		};
 	});
 }

@@ -1,12 +1,12 @@
 export namespace main {
 	
 	export class Image {
-	    ID: number[];
-	    Data: string;
+	    id: number[];
+	    data: string;
 	    // Go type: time
-	    UpdatedAt: any;
+	    updatedAt: any;
 	    // Go type: time
-	    CreatedAt: any;
+	    createdAt: any;
 	
 	    static createFrom(source: any = {}) {
 	        return new Image(source);
@@ -14,10 +14,10 @@ export namespace main {
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.ID = source["ID"];
-	        this.Data = source["Data"];
-	        this.UpdatedAt = this.convertValues(source["UpdatedAt"], null);
-	        this.CreatedAt = this.convertValues(source["CreatedAt"], null);
+	        this.id = source["id"];
+	        this.data = source["data"];
+	        this.updatedAt = this.convertValues(source["updatedAt"], null);
+	        this.createdAt = this.convertValues(source["createdAt"], null);
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
@@ -53,13 +53,13 @@ export namespace main {
 	    }
 	}
 	export class Note {
-	    ID: number[];
-	    Title: string;
-	    Content: string;
+	    id: number[];
+	    title: string;
+	    content: string;
 	    // Go type: time
-	    UpdatedAt: any;
+	    updatedAt: any;
 	    // Go type: time
-	    CreatedAt: any;
+	    createdAt: any;
 	
 	    static createFrom(source: any = {}) {
 	        return new Note(source);
@@ -67,11 +67,11 @@ export namespace main {
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.ID = source["ID"];
-	        this.Title = source["Title"];
-	        this.Content = source["Content"];
-	        this.UpdatedAt = this.convertValues(source["UpdatedAt"], null);
-	        this.CreatedAt = this.convertValues(source["CreatedAt"], null);
+	        this.id = source["id"];
+	        this.title = source["title"];
+	        this.content = source["content"];
+	        this.updatedAt = this.convertValues(source["updatedAt"], null);
+	        this.createdAt = this.convertValues(source["createdAt"], null);
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

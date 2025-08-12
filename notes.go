@@ -13,11 +13,11 @@ import (
 )
 
 type Note struct {
-	ID        uuid.UUID
-	Title     string
-	Content   string
-	UpdatedAt time.Time
-	CreatedAt time.Time
+	ID        uuid.UUID `json:"id"`
+	Title     string    `json:"title"`
+	Content   string    `json:"content"`
+	UpdatedAt time.Time `json:"updatedAt"`
+	CreatedAt time.Time `json:"createdAt"`
 }
 
 func createNote(rowNote *models.Note) Note {
