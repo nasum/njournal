@@ -29,7 +29,7 @@
     "styled-components": "^6.1.15"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.1.4",
+    "@biomejs/biome": "^2.2.0",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.1.6",
     "@types/react-router": "^5.1.20",
