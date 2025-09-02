@@ -10,7 +10,7 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.31
 	github.com/wailsapp/wails/v2 v2.10.2
 	gorm.io/driver/sqlite v1.6.0
-	gorm.io/gorm v1.30.1
+	gorm.io/gorm v1.30.2
 )
 
 require (
